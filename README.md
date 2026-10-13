@@ -118,7 +118,9 @@ Heritouch/
 │   └── 开发文档.md               # 开发文档（Markdown 版，由 scripts/docx_to_md.py 提取）
 ├── scripts/
 │   ├── gen_icons.py             # 图标生成工具脚本（PIL 绘制 tabBar 图标与 Logo）
-│   └── docx_to_md.py            # 开发文档 docx → Markdown 提取脚本
+│   ├── docx_to_md.py            # 开发文档 docx → Markdown 提取脚本
+│   ├── check_imports.js         # 静态检查：页面 import 可解析性
+│   └── check_sfc.js             # 静态检查：全部 .vue 的 SFC 编译校验
 ├── docker-compose.yml           # 一键编排：MySQL + Neo4j + API + ChromaDB
 ├── .gitignore
 └── README.md
@@ -181,11 +183,15 @@ uvicorn app.main:app --reload        # 启动服务，默认 http://localhost:80
 pip install Pillow
 python scripts/gen_icons.py
 
-# 2. HBuilderX → 文件 → 导入目录，选择 mobile-app/
+# 2. 安装前端依赖（提供 pinia / sass / vue 等运行时依赖；
+#    @dcloudio/* 由 HBuilderX 内部编译器提供，此处安装用于 CLI 构建与模块解析）
+cd mobile-app
+npm install
 ```
 
-2. HBuilderX → 运行 → 运行到浏览器（H5 调试）/ 运行到小程序模拟器 / 运行到手机或模拟器；
-3. 默认 `useMock=true`，无需后端即可体验；接入真实后端见第 8 节。
+2. HBuilderX → 文件 → 导入目录，选择 `mobile-app/`（项目为 **uni-app Vue3 经典布局**：`manifest.json`、`pages.json`、`index.html` 均位于 `mobile-app/` 根目录，首次运行若提示"项目模板是否支持 vue3 / 缺少 index.html"，确认这三者在根目录即可）；
+3. HBuilderX → 运行 → 运行到浏览器（H5 调试）/ 运行到小程序模拟器 / 运行到手机或模拟器；
+4. 默认 `useMock=true`，无需后端即可体验；接入真实后端见第 8 节。
 
 ## 7. 多端编译说明
 
@@ -253,6 +259,12 @@ python scripts/gen_icons.py     # 生成 mobile-app/static/tab 图标与 logo.pn
 python scripts/docx_to_md.py    # 将 docs/ 下 docx 重新提取为 开发文档.md
 ```
 原始 Word 文档请从项目负责人处获取放入 `docs/` 目录即可。
+
+**Q7：HBuilderX 运行报“请确认您的项目模板是否支持 vue3：根目录缺少 index.html”？**
+A：uni-app **Vue3** 编译器（Vite 模式）要求 `mobile-app/` 根目录存在 `index.html` 入口文件（Vue2 项目不需要），本仓库已包含该文件。若从旧版本克隆后仍报此错，确认 `mobile-app/index.html`、`manifest.json`、`pages.json` 三者都在 `mobile-app/` 根目录，且 `manifest.json` 中 `"vueVersion": "3"`。
+
+**Q8：`python -m scripts.seed_data` 报 No module named scripts.seed_data / 启动报连接串错误？**
+A：① 脚本名是 `seed_data`（数据），注意不是 `seed_date`，且必须在 `server/` 目录下执行；② 若报 `DATABASE_URL` 相关错误，检查 `server/.env`：该值必须是完整连接串（如 `mysql+pymysql://root:密码@localhost:3306/heritouch?charset=utf8mb4`），只填 `localhost:3306` 会被识别为非法配置并自动降级为 SQLite（`server/heritouch.db`）；③ 未配置 MySQL 时留空 `DATABASE_URL=` 即可零配置使用 SQLite。
 
 ---
 

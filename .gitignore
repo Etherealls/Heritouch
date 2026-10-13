@@ -15,6 +15,7 @@ __pycache__/
 # ===== IDE 与系统文件 =====
 .idea/
 .vscode/
+.hbuilderx/
 .DS_Store
 *.log
 
