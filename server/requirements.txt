@@ -1,0 +1,33 @@
+# =====================================================================
+# Heritouch 地方非遗文化AI解码与传承平台 —— 后端依赖清单
+# 技术栈：Python 3.10+ / FastAPI 0.100+ / Uvicorn / Pydantic 2.0+
+#         SQLAlchemy 2.0+ / Py2neo(Neo4j) / ChromaDB(RAG)
+# =====================================================================
+
+# ---------- Web 框架与 ASGI 服务器 ----------
+fastapi>=0.100.0
+uvicorn[standard]>=0.23.0
+
+# ---------- 数据校验与配置管理 ----------
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+
+# ---------- 数据库（MySQL + SQLAlchemy 2.0 ORM） ----------
+SQLAlchemy>=2.0.0
+PyMySQL>=1.1.0
+cryptography>=41.0.0            # PyMySQL 连接 MySQL 8.0 的 caching_sha2_password 认证依赖
+
+# ---------- 图数据库（Neo4j 知识图谱） ----------
+py2neo>=2021.2.3
+
+# ---------- RAG 向量库（ChromaDB + Embedding） ----------
+chromadb>=0.4.0
+
+# ---------- HTTP 客户端（调用豆包/通义千问/Stable Diffusion 等在线 API） ----------
+httpx>=0.25.0
+
+# ---------- 环境变量文件加载 ----------
+python-dotenv>=1.0.0
+
+# ---------- 语音合成（可选，未安装时自动降级为占位音频） ----------
+edge-tts>=6.1.9

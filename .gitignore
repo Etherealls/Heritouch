@@ -1,0 +1,22 @@
+# ===== 依赖与构建产物 =====
+node_modules/
+mobile-app/node_modules/
+server/.venv
+unpackage/
+dist/
+__pycache__/
+*.pyc
+
+# ===== 环境配置（含密钥，禁止提交） =====
+.env
+.env.local
+.env.*.local
+
+# ===== IDE 与系统文件 =====
+.idea/
+.vscode/
+.DS_Store
+*.log
+
+# ===== 临时提取文件 =====
+doc_extracted.txt

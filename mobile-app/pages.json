@@ -1,0 +1,181 @@
+{
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/atlas/atlas",
+      "style": {
+        "navigationBarTitleText": "非遗图谱"
+      }
+    },
+    {
+      "path": "pages/create/create",
+      "style": {
+        "navigationBarTitleText": "AI 互动创作"
+      }
+    },
+    {
+      "path": "pages/game/game",
+      "style": {
+        "navigationBarTitleText": "科普闯关"
+      }
+    },
+    {
+      "path": "pages/profile/profile",
+      "style": {
+        "navigationBarTitleText": "个人中心"
+      }
+    },
+    {
+      "path": "pages/heritage/list",
+      "style": {
+        "navigationBarTitleText": "非遗名录"
+      }
+    },
+    {
+      "path": "pages/heritage/detail",
+      "style": {
+        "navigationBarTitleText": "项目详情"
+      }
+    },
+    {
+      "path": "pages/create/pattern",
+      "style": {
+        "navigationBarTitleText": "非遗纹样生成"
+      }
+    },
+    {
+      "path": "pages/create/script",
+      "style": {
+        "navigationBarTitleText": "科普剧本生成"
+      }
+    },
+    {
+      "path": "pages/create/painting",
+      "style": {
+        "navigationBarTitleText": "非遗风格画作"
+      }
+    },
+    {
+      "path": "pages/guide/guide",
+      "style": {
+        "navigationBarTitleText": "智能导览"
+      }
+    },
+    {
+      "path": "pages/guide/qa",
+      "style": {
+        "navigationBarTitleText": "智能问答"
+      }
+    },
+    {
+      "path": "pages/guide/scan",
+      "style": {
+        "navigationBarTitleText": "扫码导览"
+      }
+    },
+    {
+      "path": "pages/game/levels",
+      "style": {
+        "navigationBarTitleText": "闯关地图"
+      }
+    },
+    {
+      "path": "pages/game/play",
+      "style": {
+        "navigationBarTitleText": "答题中"
+      }
+    },
+    {
+      "path": "pages/game/result",
+      "style": {
+        "navigationBarTitleText": "闯关结算"
+      }
+    },
+    {
+      "path": "pages/game/rank",
+      "style": {
+        "navigationBarTitleText": "积分排行榜"
+      }
+    },
+    {
+      "path": "pages/game/wrong",
+      "style": {
+        "navigationBarTitleText": "我的错题本"
+      }
+    },
+    {
+      "path": "pages/profile/works",
+      "style": {
+        "navigationBarTitleText": "我的作品"
+      }
+    },
+    {
+      "path": "pages/profile/favorites",
+      "style": {
+        "navigationBarTitleText": "我的收藏"
+      }
+    },
+    {
+      "path": "pages/profile/settings",
+      "style": {
+        "navigationBarTitleText": "设置"
+      }
+    },
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationBarTitleText": "登录"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "Heritouch 非遗",
+    "navigationBarBackgroundColor": "#F8F5EF",
+    "backgroundColor": "#F8F5EF",
+    "backgroundColorBottom": "#F8F5EF"
+  },
+  "tabBar": {
+    "color": "#9A8F7D",
+    "selectedColor": "#B03A2E",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "static/tab/index.png",
+        "selectedIconPath": "static/tab/index-active.png"
+      },
+      {
+        "pagePath": "pages/atlas/atlas",
+        "text": "图谱",
+        "iconPath": "static/tab/atlas.png",
+        "selectedIconPath": "static/tab/atlas-active.png"
+      },
+      {
+        "pagePath": "pages/create/create",
+        "text": "创作",
+        "iconPath": "static/tab/create.png",
+        "selectedIconPath": "static/tab/create-active.png"
+      },
+      {
+        "pagePath": "pages/game/game",
+        "text": "闯关",
+        "iconPath": "static/tab/game.png",
+        "selectedIconPath": "static/tab/game-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "static/tab/profile.png",
+        "selectedIconPath": "static/tab/profile-active.png"
+      }
+    ]
+  }
+}

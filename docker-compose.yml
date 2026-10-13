@@ -1,0 +1,110 @@
+# =====================================================================
+# Heritouch 地方非遗文化AI解码与传承平台 —— Docker Compose 编排（演示部署）
+# 版本：v1.0
+#
+# 服务组成：
+#   mysql  —— MySQL 8.0 业务数据库（首次启动自动执行 database/mysql 下脚本）
+#   neo4j  —— Neo4j 5.x 图数据库（非遗知识图谱）
+#   api    —— FastAPI 后端服务（源码见 server/，Dockerfile 已就绪）
+#   chroma —— ChromaDB 向量数据库（非遗知识库 RAG 检索）
+#
+# 一键启动：docker compose up -d
+#   前端/API 访问：  http://localhost:8000/api/v1
+#   Neo4j 控制台：   http://localhost:7474（neo4j / password）
+#   MySQL：          localhost:3306（root / heritouch）
+# =====================================================================
+
+services:
+  # ---------- MySQL 8.0：业务数据存储 ----------
+  mysql:
+    image: mysql:8.0
+    container_name: heritouch-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: heritouch          # root 密码（演示环境，生产请修改）
+      MYSQL_DATABASE: heritouch                # 自动创建业务数据库
+      TZ: Asia/Shanghai
+    command:
+      - --character-set-server=utf8mb4         # 服务端默认字符集
+      - --collation-server=utf8mb4_general_ci  # 默认排序规则
+      - --default-time-zone=+08:00
+    ports:
+      - "3306:3306"                            # 宿主机端口:容器端口
+    volumes:
+      - ./database/mysql:/docker-entrypoint-initdb.d:ro  # 首次初始化自动执行 schema.sql → seed.sql
+      - mysql_data:/var/lib/mysql              # 数据持久化
+    networks:
+      - heritouch-net
+    healthcheck:                               # 健康检查，api 服务据此等待数据库就绪
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pheritouch"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # ---------- Neo4j 5.x：知识图谱存储 ----------
+  neo4j:
+    image: neo4j:5                             # 跟踪 5.x 最新小版本；如需固定可改为 neo4j:5.21.2-community
+    container_name: heritouch-neo4j
+    restart: unless-stopped
+    environment:
+      NEO4J_AUTH: neo4j/password               # 初始账号/密码
+      NEO4J_server_memory_pagecache_size: 512M
+      NEO4J_server_memory_heap_max__size: 1G
+    ports:
+      - "7474:7474"                            # HTTP 控制台 / 浏览器
+      - "7687:7687"                            # Bolt 协议（py2neo 连接）
+    volumes:
+      - neo4j_data:/data                       # 图数据持久化
+      - ./database/neo4j:/var/lib/neo4j/import:ro  # 图谱初始化脚本（cypher-shell -f 执行）
+    networks:
+      - heritouch-net
+
+  # ---------- FastAPI 后端服务 ----------
+  api:
+    build: ./server                            # server/Dockerfile（Python 3.11-slim + uvicorn）
+    container_name: heritouch-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      # 注意：主机名使用容器服务名（mysql / neo4j / chroma），而非 localhost
+      DATABASE_URL: mysql+pymysql://root:heritouch@mysql:3306/heritouch?charset=utf8mb4
+      NEO4J_BOLT_URL: bolt://neo4j:7687
+      NEO4J_AUTH: neo4j/password
+      CHROMA_URL: http://chroma:8000
+      TZ: Asia/Shanghai
+    depends_on:
+      mysql:
+        condition: service_healthy             # 等待 MySQL 健康检查通过后再启动
+      neo4j:
+        condition: service_started
+      chroma:
+        condition: service_started
+    networks:
+      - heritouch-net
+
+  # ---------- ChromaDB：向量库（RAG 检索增强） ----------
+  chroma:
+    image: chromadb/chroma:latest
+    container_name: heritouch-chroma
+    restart: unless-stopped
+    environment:
+      ANONYMIZED_TELEMETRY: "false"            # 关闭匿名遥测
+      IS_PERSISTENT: "true"                    # 开启持久化
+    ports:
+      - "8001:8000"                            # 宿主机 8001 映射到容器 8000（避免与 api 的 8000 冲突）
+    volumes:
+      - chroma_data:/chroma/chroma             # 向量数据持久化
+    networks:
+      - heritouch-net
+
+# ---------- 网络：容器间通过服务名互相访问 ----------
+networks:
+  heritouch-net:
+    driver: bridge
+
+# ---------- 数据卷：数据库持久化，删除前需先 docker compose down ----------
+volumes:
+  mysql_data:
+  neo4j_data:
+  chroma_data:
