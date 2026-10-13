@@ -21,6 +21,16 @@ __pycache__/
 # ===== 临时提取文件 =====
 doc_extracted.txt
 
+# ===== 本地运行时数据（不入库） =====
+# SQLite 本地数据库（未配置 MySQL 时的降级存储）
+*.db
+*.sqlite
+*.sqlite3
+# ChromaDB 本地持久化目录
+server/chroma_data/
+# WorkBuddy 项目数据目录
+.workbuddy/
+
 # ===== 二进制资源（由脚本生成，不入库） =====
 # tabBar 图标与应用 Logo：python scripts/gen_icons.py 生成
 mobile-app/static/tab/*.png

@@ -42,6 +42,16 @@ def resolve_database_url() -> str:
     if not configured:
         logger.info("未配置 DATABASE_URL，使用 SQLite：%s", settings.SQLITE_URL)
         return settings.SQLITE_URL
+    # 防御非法配置：合法连接串必须包含 scheme（mysql+pymysql:// 、sqlite:/// 等），
+    # 常见手误是只填写 host:port（如 localhost:3306），直接交给 create_engine 会抛
+    # ArgumentError 导致服务无法启动，此处按未配置处理并降级为 SQLite
+    if "://" not in configured:
+        logger.warning(
+            "DATABASE_URL 格式非法（%r，正确格式：mysql+pymysql://用户:密码@主机:3306/库名?charset=utf8mb4），已降级为 SQLite：%s",
+            configured,
+            settings.SQLITE_URL,
+        )
+        return settings.SQLITE_URL
     if configured.startswith("mysql") and settings.SQLITE_FALLBACK:
         if _mysql_reachable(configured):
             return configured
