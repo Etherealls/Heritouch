@@ -3,7 +3,7 @@
 from PIL import Image, ImageDraw
 import math, os
 
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'mobile-app', 'static')
+OUT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'mobile-app', 'static'))
 os.makedirs(os.path.join(OUT, 'tab'), exist_ok=True)
 
 S = 162  # 2x for crispness

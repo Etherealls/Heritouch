@@ -115,9 +115,10 @@ Heritouch/
 │       └── init.cypher          # 知识图谱初始化脚本
 ├── docs/
 │   ├── API.md                   # REST API 接口文档
-│   └── 地方非遗文化AI解码与传承平台.docx   # 开发文档（需求/设计/计划）
+│   └── 开发文档.md               # 开发文档（Markdown 版，由 scripts/docx_to_md.py 提取）
 ├── scripts/
-│   └── gen_icons.py             # 图标生成工具脚本（PIL 绘制 tabBar 图标与 Logo）
+│   ├── gen_icons.py             # 图标生成工具脚本（PIL 绘制 tabBar 图标与 Logo）
+│   └── docx_to_md.py            # 开发文档 docx → Markdown 提取脚本
 ├── docker-compose.yml           # 一键编排：MySQL + Neo4j + API + ChromaDB
 ├── .gitignore
 └── README.md
@@ -175,8 +176,15 @@ uvicorn app.main:app --reload        # 启动服务，默认 http://localhost:80
 
 **前端：**
 
-1. HBuilderX → 文件 → 导入目录，选择 `mobile-app/`；
-2. 运行 → 运行到浏览器（H5 调试）/ 运行到小程序模拟器 / 运行到手机或模拟器；
+```bash
+# 1. 生成应用图标（tabBar 图标 + Logo，PIL 绘制，约 10 秒）
+pip install Pillow
+python scripts/gen_icons.py
+
+# 2. HBuilderX → 文件 → 导入目录，选择 mobile-app/
+```
+
+2. HBuilderX → 运行 → 运行到浏览器（H5 调试）/ 运行到小程序模拟器 / 运行到手机或模拟器；
 3. 默认 `useMock=true`，无需后端即可体验；接入真实后端见第 8 节。
 
 ## 7. 多端编译说明
@@ -236,6 +244,15 @@ A：保持 `useMock=true`（默认即此状态），所有数据来自 `mobile-a
 
 **Q5：MySQL 初始化脚本没有执行？**
 A：`docker-entrypoint-initdb.d` 仅在数据卷为空（首次启动）时执行。如需重新灌数：`docker compose down -v` 删除卷后重新 `up -d`，或手动执行 `mysql -uroot -pheritouch heritouch < database/mysql/schema.sql && mysql -uroot -pheritouch heritouch < database/mysql/seed.sql`。
+
+**Q6：克隆仓库后 tabBar 图标缺失 / 想看原始 Word 开发文档？**
+A：仓库中的二进制资源（tabBar 图标 PNG、应用 Logo、原始 docx）均由脚本生成，首次使用请执行：
+```bash
+pip install Pillow python-docx
+python scripts/gen_icons.py     # 生成 mobile-app/static/tab 图标与 logo.png
+python scripts/docx_to_md.py    # 将 docs/ 下 docx 重新提取为 开发文档.md
+```
+原始 Word 文档请从项目负责人处获取放入 `docs/` 目录即可。
 
 ---
 

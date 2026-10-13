@@ -20,3 +20,10 @@ __pycache__/
 
 # ===== 临时提取文件 =====
 doc_extracted.txt
+
+# ===== 二进制资源（由脚本生成，不入库） =====
+# tabBar 图标与应用 Logo：python scripts/gen_icons.py 生成
+mobile-app/static/tab/*.png
+mobile-app/static/logo.png
+# 开发文档原始 docx：python scripts/docx_to_md.py 转 Markdown 后入库
+docs/*.docx
