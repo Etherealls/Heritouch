@@ -75,7 +75,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onLoad, onShow } from '@dcloudio/uni-app'
+import { ref, computed } from 'vue'
+import { onLoad, onShow } from '@dcloudio/uni-app'
 import { getWorks, deleteWork } from '@/api/ai'
 import { fromNow } from '@/utils/util'
 

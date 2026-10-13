@@ -59,7 +59,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onLoad } from '@dcloudio/uni-app'
+import { ref, computed } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
 import { getLevels } from '@/api/game'
 
 /* ---------- 数据 ---------- */

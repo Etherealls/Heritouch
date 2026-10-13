@@ -40,7 +40,8 @@
 </template>
 
 <script setup>
-import { ref, onLoad, onShow } from '@dcloudio/uni-app'
+import { ref } from 'vue'
+import { onLoad, onShow } from '@dcloudio/uni-app'
 import { getFavorites, toggleFavorite } from '@/api/user'
 import { fromNow } from '@/utils/util'
 

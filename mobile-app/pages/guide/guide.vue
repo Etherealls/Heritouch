@@ -104,8 +104,9 @@
 </template>
 
 <script setup>
-import { ref, computed, onLoad, onUnload } from '@dcloudio/uni-app'
-import { getProjectDetail, getGuideAudio } from '@/api/heritage'
+import { ref, computed } from 'vue'
+import { onLoad, onUnload } from '@dcloudio/uni-app'
+import { getProjectDetail } from '@/api/heritage'
 import { getGuideAudio as fetchGuideAudio } from '@/api/guide'
 
 /* ---------- 数据 ---------- */

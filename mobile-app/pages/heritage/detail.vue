@@ -185,7 +185,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onLoad } from '@dcloudio/uni-app'
+import { ref, computed } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
 import { getProjectDetail, getRecommendations } from '@/api/heritage'
 import { toggleFavorite } from '@/api/user'
 import { useUserStore } from '@/store/user'

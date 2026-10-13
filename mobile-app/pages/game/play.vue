@@ -93,7 +93,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onLoad, onUnload } from '@dcloudio/uni-app'
+import { ref, computed } from 'vue'
+import { onLoad, onUnload } from '@dcloudio/uni-app'
 import { getQuestions, submitAnswer, recordLevelResult } from '@/api/game'
 
 /* ---------- 数据 ---------- */

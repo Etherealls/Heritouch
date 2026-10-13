@@ -120,7 +120,11 @@ Heritouch/
 │   ├── gen_icons.py             # 图标生成工具脚本（PIL 绘制 tabBar 图标与 Logo）
 │   ├── docx_to_md.py            # 开发文档 docx → Markdown 提取脚本
 │   ├── check_imports.js         # 静态检查：页面 import 可解析性
-│   └── check_sfc.js             # 静态检查：全部 .vue 的 SFC 编译校验
+│   ├── check_exports.js         # 静态检查：命名导入是否为目标模块真实导出
+│   ├── check_sfc.js             # 静态检查：全部 .vue 的 SFC 编译校验
+│   ├── check_scss.js            # 静态检查：全部 SCSS 样式块编译校验
+│   ├── fix_uni_imports.js       # 修复工具：将误导入的 Vue API 拆分回 'vue'
+│   └── repair_imports.js        # 修复工具：恢复导入丢失的兜底脚本
 ├── docker-compose.yml           # 一键编排：MySQL + Neo4j + API + ChromaDB
 ├── .gitignore
 └── README.md
@@ -265,6 +269,9 @@ A：uni-app **Vue3** 编译器（Vite 模式）要求 `mobile-app/` 根目录存
 
 **Q8：`python -m scripts.seed_data` 报 No module named scripts.seed_data / 启动报连接串错误？**
 A：① 脚本名是 `seed_data`（数据），注意不是 `seed_date`，且必须在 `server/` 目录下执行；② 若报 `DATABASE_URL` 相关错误，检查 `server/.env`：该值必须是完整连接串（如 `mysql+pymysql://root:密码@localhost:3306/heritouch?charset=utf8mb4`），只填 `localhost:3306` 会被识别为非法配置并自动降级为 SQLite（`server/heritouch.db`）；③ 未配置 MySQL 时留空 `DATABASE_URL=` 即可零配置使用 SQLite。
+
+**Q9：编译报 "xxx is not exported by @dcloudio/uni-app"？**
+A：uni-app Vue3 的导入规范：**页面生命周期钩子**（`onLoad`/`onShow`/`onPullDownRefresh`/`onReachBottom`/`onUnload` 等）从 `@dcloudio/uni-app` 导入；**Vue 响应式 API**（`ref`/`reactive`/`computed`/`watch`/`nextTick` 等）必须从 `vue` 导入——uni-app 不导出这些。提交前可运行 `node scripts/check_exports.js` 自动校验全部命名导入。
 
 ---
 

@@ -46,7 +46,8 @@
 </template>
 
 <script setup>
-import { ref, onLoad, onShow } from '@dcloudio/uni-app'
+import { ref } from 'vue'
+import { onLoad, onShow } from '@dcloudio/uni-app'
 import { getWrongBook, removeWrong } from '@/api/game'
 
 /* ---------- 数据 ---------- */
