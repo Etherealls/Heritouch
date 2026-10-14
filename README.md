@@ -183,6 +183,9 @@ pip install -r requirements.txt      # 安装依赖
 cp .env.example .env                 # 配置数据库/AI 密钥（按注释填写）
 python -m scripts.seed_data          # 一键灌数（MySQL 结构+数据、Neo4j 图谱）
 uvicorn app.main:app --reload        # 启动服务，默认 http://localhost:8000
+
+# 真机/局域网调试时，需监听所有网卡（否则手机连不上）：
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 **前端：**
@@ -218,6 +221,7 @@ npm install
 - **默认演示模式**：前端 `mobile-app/utils/config.js` 中 `useMock = true`，所有接口由本地 Mock 数据（`api/mock/data.js`）驱动，**无需后端即可完整体验**全部功能；
 - **数据规模**：Mock 数据源为**全国非遗真实名录**（中国非物质文化遗产网 ihchina.cn，4234 个项目 / 3959 位传承人 / 10 大门类），由 `scripts/build_all_data.py` 生成 `api/mock/national-data.js`；
 - **切换真实服务器**：进入「我的 → 设置 → 服务器配置」，填写后端地址（如 `http://localhost:8000/api/v1`）并关闭 Mock 开关即可；后端种子脚本 `server/scripts/seed_data.py` 会自动检测并灌入同一份全国数据；
+- **真机/局域网调试**：手机与电脑连接**同一 WiFi**，在「我的 → 设置 → 服务器地址」填写电脑的局域网 IP（如 `http://192.168.1.100:8000/api/v1`，用 `ipconfig` 查看电脑 IPv4 地址），点击「测试连接」验证可达即可；后端需以 `--host 0.0.0.0` 启动，且 Windows 防火墙需放行 8000 端口。换网络后只需在设置页更新 IP，**无需重新打包**；
 - **Mock 与真实接口契约一致**：Mock 层与 `docs/API.md` 中定义的请求/响应结构完全一致，切换时业务代码零改动。
 
 > **关于图谱性能**：全国数据量达 8000+ 实体节点，移动端力导向图无法一次性渲染全部。图谱页默认展示「类别 → 代表项目」概览，点击类别筛选后展示该类项目与传承人子图（单类限流约 120 个项目，避免卡顿）。

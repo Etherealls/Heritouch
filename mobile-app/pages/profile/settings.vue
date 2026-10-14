@@ -20,7 +20,7 @@
           class="server-input"
           type="text"
           v-model="baseUrlInput"
-          placeholder="http://localhost:8000/api/v1"
+          placeholder="http://192.168.1.100:8000/api/v1"
           placeholder-class="server-placeholder"
           @blur="onBaseUrlBlur"
         />
@@ -28,7 +28,19 @@
           <text>保存</text>
         </view>
       </view>
-      <text class="server-tip">仅在关闭演示数据模式时生效，修改后立即保存</text>
+      <view class="server-actions">
+        <view class="test-btn" :class="{ disabled: testing }" @click="onTestConnection">
+          <text>{{ testing ? '测试中…' : '测试连接' }}</text>
+        </view>
+        <view class="reset-btn" @click="onResetBaseUrl">
+          <text>恢复默认</text>
+        </view>
+      </view>
+      <text class="server-tip">
+        真机调试时填写电脑的局域网 IP（如 http://192.168.x.x:8000/api/v1），
+        手机与电脑需连接同一 WiFi。换网络后在此更新 IP 即可，无需重新打包。
+      </text>
+      <text v-if="testResult" class="server-test-result" :class="testOk ? 'ok' : 'fail'">{{ testResult }}</text>
     </view>
 
     <!-- ===== 清除本地缓存 ===== -->
@@ -77,6 +89,9 @@ import { useAppStore } from '@/store/app'
 /* ---------- 数据 ---------- */
 const appStore = useAppStore()
 const baseUrlInput = ref(appStore.baseUrl)
+const testing = ref(false)
+const testResult = ref('')
+const testOk = ref(false)
 
 /* ---------- 交互 ---------- */
 
@@ -103,7 +118,51 @@ function saveBaseUrl() {
     return
   }
   appStore.setBaseUrl(url)
+  testResult.value = ''
   uni.showToast({ title: '服务器地址已保存', icon: 'success' })
+}
+
+/* 测试连接：向服务器发一个轻量请求验证地址是否可达 */
+function onTestConnection() {
+  const url = baseUrlInput.value.trim()
+  if (!url) {
+    uni.showToast({ title: '请先填写服务器地址', icon: 'none' })
+    return
+  }
+  // 保存后测试（确保测试的是当前输入框里的地址）
+  appStore.setBaseUrl(url)
+  testing.value = true
+  testResult.value = ''
+  // 请求一个无需登录的轻量接口：非遗分类列表
+  uni.request({
+    url: url + '/heritage/categories',
+    method: 'GET',
+    timeout: 10000,
+    success(res) {
+      if (res.statusCode >= 200 && res.statusCode < 300) {
+        testOk.value = true
+        testResult.value = '✅ 连接成功，服务器可达'
+      } else {
+        testOk.value = false
+        testResult.value = '❌ 连接失败（HTTP ' + res.statusCode + '），请检查地址与后端是否启动'
+      }
+    },
+    fail() {
+      testOk.value = false
+      testResult.value = '❌ 无法连接，请确认：1) 后端已用 --host 0.0.0.0 启动 2) 手机与电脑同一 WiFi 3) 防火墙已放行端口'
+    },
+    complete() {
+      testing.value = false
+    }
+  })
+}
+
+/* 恢复默认地址 */
+function onResetBaseUrl() {
+  baseUrlInput.value = 'http://localhost:8000/api/v1'
+  appStore.setBaseUrl(baseUrlInput.value)
+  testResult.value = ''
+  uni.showToast({ title: '已恢复默认地址', icon: 'none' })
 }
 
 /* 清除本地缓存 */
@@ -226,11 +285,62 @@ onShow(() => {
   color: #fff;
   font-weight: 600;
 }
+.server-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 16rpx;
+}
+.test-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 64rpx;
+  padding: 0 28rpx;
+  border-radius: $radius-md;
+  background: #edf3f2;
+  margin-right: 16rpx;
+}
+.test-btn text {
+  font-size: 24rpx;
+  color: $teal;
+  font-weight: 600;
+}
+.test-btn.disabled {
+  opacity: 0.5;
+}
+.reset-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 64rpx;
+  padding: 0 28rpx;
+  border-radius: $radius-md;
+  background: $paper;
+  border: 1rpx solid $border;
+}
+.reset-btn text {
+  font-size: 24rpx;
+  color: $ink-light;
+}
 .server-tip {
   display: block;
   font-size: 20rpx;
   color: $ink-light;
   margin-top: 12rpx;
+  line-height: 1.6;
+}
+.server-test-result {
+  display: block;
+  font-size: 24rpx;
+  font-weight: 600;
+  margin-top: 12rpx;
+}
+.server-test-result.ok {
+  color: #1a7f37;
+}
+.server-test-result.fail {
+  color: $danger;
 }
 
 /* ---------- 关于 ---------- */

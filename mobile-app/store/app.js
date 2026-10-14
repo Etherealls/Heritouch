@@ -2,7 +2,7 @@
  * 全局 App 配置 Store：Mock 开关、服务器地址、扫码导览待处理项目
  */
 import { defineStore } from 'pinia'
-import config from '@/utils/config'
+import config, { saveServerConfig } from '@/utils/config'
 
 export const useAppStore = defineStore('app', {
   state: () => ({
@@ -14,12 +14,13 @@ export const useAppStore = defineStore('app', {
   actions: {
     setMock(val) {
       this.useMock = val
-      uni.setStorageSync('heritouch_server_config', JSON.stringify({ useMock: val, baseUrl: this.baseUrl }))
+      config.useMock = val
+      saveServerConfig({ useMock: val })
     },
     setBaseUrl(url) {
       this.baseUrl = url
       config.baseUrl = url
-      uni.setStorageSync('heritouch_server_config', JSON.stringify({ useMock: this.useMock, baseUrl: url }))
+      saveServerConfig({ baseUrl: url })
     },
     setPendingScan(id) {
       this.pendingScanProjectId = id

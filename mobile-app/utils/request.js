@@ -9,9 +9,11 @@ import config from './config'
 function request(options) {
   const { url, method = 'GET', data = {}, header = {} } = options
   const token = uni.getStorageSync(config.storageKeys.token) || ''
+  // 每次请求实时读取最新服务器地址（设置页修改后无需重启即生效）
+  const baseUrl = config.baseUrl
   return new Promise((resolve, reject) => {
     uni.request({
-      url: config.baseUrl + url,
+      url: baseUrl + url,
       method,
       data,
       timeout: config.timeout,
