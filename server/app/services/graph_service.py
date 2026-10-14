@@ -1,5 +1,8 @@
 """Neo4j 知识图谱服务。
 
+使用官方 neo4j Python 驱动（py2neo 2021.2.4 与 Neo4j 5.26+ 的 Bolt 5
+协议不兼容，故迁移到官方驱动）。
+
 降级策略：
 - 未配置 Neo4j 或连接失败时，从 MySQL 业务数据构建同构图谱
   （全国非遗数据，数据库为空时回退内置演示数据）；
@@ -193,10 +196,14 @@ GRAPH_CUSTOM_LINKS: dict[int, list[str]] = {
 
 
 class GraphService:
-    """知识图谱服务：Neo4j 优先，失败/无数据时降级内存演示数据。"""
+    """知识图谱服务：Neo4j 优先，失败/无数据时降级内存演示数据。
+
+    使用官方 neo4j 驱动；GraphService.run() 模拟原 py2neo Graph.run 的
+    记录迭代行为，内部查询逻辑保持不变。
+    """
 
     def __init__(self) -> None:
-        self.graph: Optional[Any] = None
+        self.driver: Optional[Any] = None
         self._connect()
 
     # ---------- 连接 ----------
@@ -208,19 +215,26 @@ class GraphService:
             logger.info("未配置 Neo4j，知识图谱使用内存演示数据")
             return
         try:
-            from py2neo import Graph  # 延迟导入，未安装 py2neo 时也可启动
+            from neo4j import GraphDatabase  # 延迟导入，未安装驱动时也可启动
 
-            self.graph = Graph(url, auth=(user, password))
-            self.graph.run("RETURN 1")
+            self.driver = GraphDatabase.driver(url, auth=(user, password))
+            self.driver.verify_connectivity()
             logger.info("Neo4j 连接成功：%s", url)
         except Exception as exc:  # noqa: BLE001 - 连接失败统一降级
             logger.warning("Neo4j 连接失败，知识图谱降级为内存演示数据：%s", exc)
-            self.graph = None
+            self.driver = None
 
     @property
     def available(self) -> bool:
         """Neo4j 是否可用。"""
-        return self.graph is not None
+        return self.driver is not None
+
+    def run(self, cypher: str, **params: Any) -> list[Any]:
+        """执行 Cypher 并返回记录列表（替代原 py2neo Graph.run 的结果迭代）。"""
+        if self.driver is None:
+            return []
+        with self.driver.session() as session:
+            return list(session.run(cypher, params))
 
     # ---------- 图谱查询 ----------
     def get_graph(
@@ -257,34 +271,46 @@ class GraphService:
     def _query_neo4j(
         self, category: Optional[str], region: Optional[str], depth: int
     ) -> dict[str, Any]:
-        """Cypher 查询全图（按类别/地区过滤）。"""
-        params = {"category": category or "", "region": region or ""}
+        """Cypher 查询全图（按类别/地区过滤）。
+
+        无过滤时仅取 60 个代表项目，有过滤时限 120 个，避免全量
+        （8203 节点）返回导致移动端渲染卡死。
+        """
+        params: dict[str, Any] = {
+            "category": category or "",
+            "region": region or "",
+            "limit": 120 if (category or region) else 60,
+        }
+        limit_clause = "WITH h LIMIT $limit "
         if depth >= 2:
             cypher = """
                 MATCH (h:Heritage)
                 WHERE ($category = '' OR h.category = $category)
                   AND ($region = '' OR h.region CONTAINS $region)
+                %s
                 OPTIONAL MATCH (h)-[r1]-(n1)
                 OPTIONAL MATCH (n1)-[r2]-(n2)
+                    WHERE NOT n1:Category
                 RETURN h AS center,
                        collect(DISTINCT n1) AS nodes1,
                        collect(DISTINCT n2) AS nodes2,
                        collect(DISTINCT r1) AS rels1,
                        collect(DISTINCT r2) AS rels2
-            """
+            """ % limit_clause
         else:
             cypher = """
                 MATCH (h:Heritage)
                 WHERE ($category = '' OR h.category = $category)
                   AND ($region = '' OR h.region CONTAINS $region)
+                %s
                 OPTIONAL MATCH (h)-[r1]-(n1)
                 RETURN h AS center,
                        collect(DISTINCT n1) AS nodes1,
                        [] AS nodes2,
-                       collect(DISTINCT r1) AS rels1,
-                       [] AS rels2
-            """
-        result = self.graph.run(cypher, **params)
+                       [] AS rels2,
+                       collect(DISTINCT r1) AS rels1
+            """ % limit_clause
+        result = self.run(cypher, **params)
         return self._assemble(result)
 
     def _query_neo4j_project(self, project_id: int) -> dict[str, Any]:
@@ -294,7 +320,7 @@ class GraphService:
             OPTIONAL MATCH (h)-[r]-(n)
             RETURN h AS center, collect(DISTINCT n) AS nodes1, collect(DISTINCT r) AS rels1
         """
-        result = self.graph.run(cypher, id=project_id)
+        result = self.run(cypher, id=project_id)
         return self._assemble(result)
 
     def _assemble(self, result: Any) -> dict[str, Any]:
@@ -308,22 +334,22 @@ class GraphService:
                 return None
             node_dict = self._node_to_dict(node)
             if node_dict:
-                nodes[node.identity] = node_dict
+                nodes[node.element_id] = node_dict
             return node_dict
 
         for record in result:
             register(record["center"])
-            for node in record["nodes1"] or []:
+            for node in record.get("nodes1") or []:
                 register(node)
-            for node in record["nodes2"] or []:
+            for node in record.get("nodes2") or []:
                 register(node)
             for rel in list(record.get("rels1") or []) + list(record.get("rels2") or []):
-                source = nodes.get(rel.start_node.identity)
-                target = nodes.get(rel.end_node.identity)
+                source = nodes.get(rel.start_node.element_id)
+                target = nodes.get(rel.end_node.element_id)
                 if not source or not target:
                     continue
-                rel_type = type(rel).__name__
-                key = (rel.start_node.identity, rel.end_node.identity, rel_type)
+                rel_type = rel.type
+                key = (rel.start_node.element_id, rel.end_node.element_id, rel_type)
                 if key in seen_edges:
                     continue
                 seen_edges.add(key)
@@ -338,11 +364,11 @@ class GraphService:
 
     @staticmethod
     def _node_to_dict(node: Any) -> Optional[dict[str, Any]]:
-        """py2neo Node → 前端节点结构（id 前缀与前端约定一致）。"""
-        labels = list(node.labels)
+        """neo4j 驱动 Node → 前端节点结构（id 前缀与前端约定一致）。"""
+        labels = set(node.labels)
         if not labels:
             return None
-        node_type = labels[0].lower()
+        node_type = sorted(labels)[0].lower()
         props = dict(node)
         name = str(props.get("name", ""))
         ref_id: Optional[int] = None
@@ -517,7 +543,7 @@ class GraphService:
 
     def _merge_project(self, project: HeritageProject) -> None:
         """MERGE 项目节点及其类别/朝代/材料/民俗关系。"""
-        self.graph.run(
+        self.run(
             """
             MERGE (h:Heritage {id: $id})
             SET h.name = $name, h.level = $level, h.category = $category, h.region = $region
@@ -545,7 +571,7 @@ class GraphService:
 
     def _merge_inheritor(self, person: Inheritor) -> None:
         """MERGE 传承人节点与 [:INHERITS] 关系。"""
-        self.graph.run(
+        self.run(
             """
             MERGE (i:Inheritor {id: $id})
             SET i.name = $name, i.title = $title
