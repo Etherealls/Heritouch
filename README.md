@@ -110,15 +110,20 @@ Heritouch/
 ├── database/                    # 数据库脚本
 │   ├── mysql/
 │   │   ├── schema.sql           # 建库建表脚本
-│   │   └── seed.sql             # 扬州非遗演示数据
+│   │   ├── seed.sql             # 扬州非遗演示数据（14 项目，默认兜底）
+│   │   └── seed_national.sql    # 全国非遗数据（4234 项目/3959 传承人，由脚本生成）
 │   └── neo4j/
-│       └── init.cypher          # 知识图谱初始化脚本
+│       ├── init.cypher          # 知识图谱初始化脚本（扬州演示）
+│       └── init_national.cypher # 全国知识图谱初始化脚本（由脚本生成）
 ├── docs/
 │   ├── API.md                   # REST API 接口文档
 │   └── 开发文档.md               # 开发文档（Markdown 版，由 scripts/docx_to_md.py 提取）
 ├── scripts/
 │   ├── gen_icons.py             # 图标生成工具脚本（PIL 绘制 tabBar 图标与 Logo）
 │   ├── docx_to_md.py            # 开发文档 docx → Markdown 提取脚本
+│   ├── crawl_ihchina.py         # 数据采集：抓取 ihchina.cn 全国非遗名录
+│   ├── build_seed_national.py   # 数据转换：全国名录 → seed_national.json
+│   ├── build_all_data.py        # 数据生成：seed_national.json → 前端 mock/MySQL/Neo4j
 │   ├── check_imports.js         # 静态检查：页面 import 可解析性
 │   ├── check_exports.js         # 静态检查：命名导入是否为目标模块真实导出
 │   ├── check_sfc.js             # 静态检查：全部 .vue 的 SFC 编译校验
@@ -211,8 +216,11 @@ npm install
 ## 8. 演示模式说明（Mock 切换）
 
 - **默认演示模式**：前端 `mobile-app/utils/config.js` 中 `useMock = true`，所有接口由本地 Mock 数据（`api/mock/data.js`）驱动，**无需后端即可完整体验**全部功能；
-- **切换真实服务器**：进入「我的 → 设置 → 服务器配置」，填写后端地址（如 `http://localhost:8000/api/v1`）并关闭 Mock 开关即可；
+- **数据规模**：Mock 数据源为**全国非遗真实名录**（中国非物质文化遗产网 ihchina.cn，4234 个项目 / 3959 位传承人 / 10 大门类），由 `scripts/build_all_data.py` 生成 `api/mock/national-data.js`；
+- **切换真实服务器**：进入「我的 → 设置 → 服务器配置」，填写后端地址（如 `http://localhost:8000/api/v1`）并关闭 Mock 开关即可；后端种子脚本 `server/scripts/seed_data.py` 会自动检测并灌入同一份全国数据；
 - **Mock 与真实接口契约一致**：Mock 层与 `docs/API.md` 中定义的请求/响应结构完全一致，切换时业务代码零改动。
+
+> **关于图谱性能**：全国数据量达 8000+ 实体节点，移动端力导向图无法一次性渲染全部。图谱页默认展示「类别 → 代表项目」概览，点击类别筛选后展示该类项目与传承人子图（单类限流约 120 个项目，避免卡顿）。
 
 ## 9. API 文档
 
@@ -220,8 +228,9 @@ npm install
 
 ## 10. 数据来源与合规说明
 
-- **公开数据来源**：项目名称、类别、级别、批次等结构化信息依据中国非物质文化遗产网（ihchina.cn）及各级文旅主管部门公开名录整理；
-- **演示数据声明**：传承人信息、简介文本中概括性描述、图谱关系为**演示数据**，不构成史实考证依据；正式发布前需经非遗研究领域专家审校；
+- **公开数据来源**：项目名称、类别、级别、批次、简介等结构化信息来源于中国非物质文化遗产网（ihchina.cn）公开名录（通过 `scripts/crawl_ihchina.py` 采集）；
+- **数据采集与生成**：`scripts/crawl_ihchina.py`（采集）→ `scripts/build_seed_national.py`（转换）→ `scripts/build_all_data.py`（生成前端 mock/MySQL/Neo4j 三份数据）；
+- **演示数据声明**：闯关题目、智能问答回复为**演示内容**；部分扩展项目（如刺绣类）的类别按名称推断，个别简介为名录原始描述，正式发布前建议经非遗研究领域专家审校；
 - **AI 内容合规**：所有 AI 生成内容（纹样、剧本、画作、问答答案）在界面中统一标注 **"AI 创作"** 标识，数据库作品表以 `prompt` 字段留存创作提示词以便溯源；
 - **非商业用途**：本项目为教学实训与非遗公益传播演示，不作商业用途；图片音频资源如涉版权请联系替换。
 

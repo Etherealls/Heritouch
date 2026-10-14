@@ -37,12 +37,12 @@
       <text class="section-text">{{ project.intro }}</text>
     </view>
 
-    <view class="section card">
+    <view class="section card" v-if="project.history">
       <text class="section-title">历史渊源</text>
       <text class="section-text">{{ project.history }}</text>
     </view>
 
-    <view class="section card">
+    <view class="section card" v-if="craftSteps.length">
       <text class="section-title">工艺流程</text>
       <view class="craft-step" v-for="(step, i) in craftSteps" :key="i">
         <view class="craft-index">{{ i + 1 }}</view>
