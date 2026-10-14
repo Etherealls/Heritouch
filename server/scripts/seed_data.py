@@ -16,6 +16,7 @@ import logging
 import os
 
 from app.core.database import Base, SessionLocal, engine
+from app.core.security import hash_password
 from app.models.game import GameLevel, GameQuestion
 from app.models.heritage import HeritageProject, Inheritor
 from app.models.user import SysUser
@@ -545,14 +546,16 @@ QUESTIONS: list[dict] = [
 
 # =====================================================================
 # 五、演示用户（1 个管理员 + 5 个排行榜用户，便于演示积分排行榜）
+# 统一密码：123456（仅用于演示，正式环境请注册新账号）
 # =====================================================================
+_DEMO_PASSWORD = "123456"
 DEMO_USERS: list[dict] = [
-    {"id": 1, "openid": "demo_admin", "nickname": "非遗管理员", "avatar": AVATAR_PLACEHOLDER, "score": 0},
-    {"id": 2, "openid": "demo_rank_1", "nickname": "非遗小达人", "avatar": AVATAR_PLACEHOLDER, "score": 980},
-    {"id": 3, "openid": "demo_rank_2", "nickname": "扬州小秀才", "avatar": AVATAR_PLACEHOLDER, "score": 860},
-    {"id": 4, "openid": "demo_rank_3", "nickname": "剪纸小传人", "avatar": AVATAR_PLACEHOLDER, "score": 720},
-    {"id": 5, "openid": "demo_rank_4", "nickname": "玉雕学徒", "avatar": AVATAR_PLACEHOLDER, "score": 610},
-    {"id": 6, "openid": "demo_rank_5", "nickname": "早茶常客", "avatar": AVATAR_PLACEHOLDER, "score": 480},
+    {"id": 1, "username": "admin", "password_hash": hash_password(_DEMO_PASSWORD), "nickname": "非遗管理员", "avatar": AVATAR_PLACEHOLDER, "score": 0},
+    {"id": 2, "username": "user1", "password_hash": hash_password(_DEMO_PASSWORD), "nickname": "非遗小达人", "avatar": AVATAR_PLACEHOLDER, "score": 980},
+    {"id": 3, "username": "user2", "password_hash": hash_password(_DEMO_PASSWORD), "nickname": "扬州小秀才", "avatar": AVATAR_PLACEHOLDER, "score": 860},
+    {"id": 4, "username": "user3", "password_hash": hash_password(_DEMO_PASSWORD), "nickname": "剪纸小传人", "avatar": AVATAR_PLACEHOLDER, "score": 720},
+    {"id": 5, "username": "user4", "password_hash": hash_password(_DEMO_PASSWORD), "nickname": "玉雕学徒", "avatar": AVATAR_PLACEHOLDER, "score": 610},
+    {"id": 6, "username": "user5", "password_hash": hash_password(_DEMO_PASSWORD), "nickname": "早茶常客", "avatar": AVATAR_PLACEHOLDER, "score": 480},
 ]
 
 

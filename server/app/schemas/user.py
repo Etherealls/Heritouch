@@ -11,12 +11,20 @@ from typing import Optional
 from pydantic import BaseModel, ConfigDict, Field
 
 
-class LoginIn(BaseModel):
-    """登录/注册入参：openid 为空时后端生成设备标识。"""
+class RegisterIn(BaseModel):
+    """注册入参：用户名 + 密码（用户名唯一）。"""
 
-    openid: str = Field("", max_length=100)
-    nickname: str = Field("", max_length=50)
-    avatar: str = Field("", max_length=255)
+    username: str = Field(..., min_length=2, max_length=30, description="用户名（唯一标识）")
+    password: str = Field(..., min_length=6, max_length=50, description="密码")
+    nickname: str = Field("", max_length=50, description="昵称（可选）")
+    avatar: str = Field("", max_length=255, description="头像URL（可选）")
+
+
+class LoginIn(BaseModel):
+    """登录入参：用户名 + 密码。"""
+
+    username: str = Field(..., min_length=1, max_length=30, description="用户名")
+    password: str = Field(..., min_length=1, max_length=50, description="密码")
 
 
 class ProfileIn(BaseModel):
@@ -24,6 +32,13 @@ class ProfileIn(BaseModel):
 
     nickname: Optional[str] = Field(None, max_length=50)
     avatar: Optional[str] = Field(None, max_length=255)
+
+
+class PasswordIn(BaseModel):
+    """修改密码入参：需验证旧密码。"""
+
+    old_password: str = Field(..., min_length=1, max_length=50, description="旧密码")
+    new_password: str = Field(..., min_length=6, max_length=50, description="新密码")
 
 
 class FavoriteIn(BaseModel):

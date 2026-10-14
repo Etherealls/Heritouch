@@ -68,8 +68,7 @@ async function loadCategories() {
     const list = await getCategories()
     categoryNames.value = (list || []).map((c) => c.name)
   } catch (e) {
-    // 分类加载失败时使用内置默认列表兜底
-    categoryNames.value = ['传统技艺', '传统美术', '传统戏剧', '传统音乐', '曲艺', '民俗', '传统医药']
+    categoryNames.value = []
   }
 }
 

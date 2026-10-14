@@ -13,8 +13,9 @@ export const useUserStore = defineStore('user', {
   }),
   getters: {
     isLogin: (state) => !!state.token,
-    nickname: (state) => state.userInfo.nickname || '未登录',
-    avatar: (state) => state.userInfo.avatar || '/static/images/avatar-default.jpg',
+    nickname: (state) => state.userInfo.nickname || state.userInfo.username || '未登录',
+    username: (state) => state.userInfo.username || '',
+    avatar: (state) => state.userInfo.avatar || '',
     totalScore: (state) => state.userInfo.score || 0
   },
   actions: {

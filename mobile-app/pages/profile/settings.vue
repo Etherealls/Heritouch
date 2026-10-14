@@ -1,17 +1,5 @@
 <template>
   <view class="settings">
-    <!-- ===== 数据模式 ===== -->
-    <view class="group card">
-      <text class="group-title">数据模式</text>
-      <view class="setting-row">
-        <view class="flex-1">
-          <text class="setting-name">演示数据模式</text>
-          <text class="setting-desc">开启 = 使用本地演示数据；关闭 = 连接真实服务器</text>
-        </view>
-        <switch :checked="useMock" color="#b03a2e" @change="onMockChange" />
-      </view>
-    </view>
-
     <!-- ===== 服务器地址 ===== -->
     <view class="group card">
       <text class="group-title">服务器地址</text>
@@ -94,13 +82,6 @@ const testResult = ref('')
 const testOk = ref(false)
 
 /* ---------- 交互 ---------- */
-
-/* 演示数据开关 */
-function onMockChange(e) {
-  const val = e.detail.value
-  appStore.setMock(val)
-  uni.showToast({ title: val ? '已开启演示数据模式' : '已切换到真实服务器模式', icon: 'none' })
-}
 
 /* 服务器地址输入框失焦自动保存 */
 function onBaseUrlBlur() {

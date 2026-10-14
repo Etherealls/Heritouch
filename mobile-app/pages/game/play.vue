@@ -95,7 +95,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { onLoad, onUnload } from '@dcloudio/uni-app'
-import { getQuestions, submitAnswer, recordLevelResult } from '@/api/game'
+import { getQuestions, submitAnswer } from '@/api/game'
 
 /* ---------- 数据 ---------- */
 const loading = ref(true)
@@ -173,8 +173,7 @@ function nextStep() {
 
 /* 结算并跳转结果页 */
 function finish() {
-  // 记录本关成绩
-  recordLevelResult(levelId.value, score.value, questions.value.length)
+  // 成绩已由后端在每题提交时累计积分，这里直接跳转结果页
   uni.redirectTo({
     url: '/pages/game/result?levelId=' + levelId.value +
       '&score=' + score.value +

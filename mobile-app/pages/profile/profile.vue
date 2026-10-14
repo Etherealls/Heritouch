@@ -13,7 +13,7 @@
     </view>
 
     <!-- ===== 已登录：头像昵称积分卡 ===== -->
-    <view v-else class="user-card">
+    <view v-else class="user-card" @click="goEditProfile">
       <view class="user-card-bg"></view>
       <view class="user-card-body">
         <!-- 头像占位（无图片资源，用首字色块） -->
@@ -21,17 +21,25 @@
           <text>{{ (userInfo.nickname || '我').slice(0, 1) }}</text>
         </view>
         <view class="flex-1">
-          <text class="user-name text-ellipsis">{{ userInfo.nickname || '非遗体验官' }}</text>
+          <text class="user-name text-ellipsis">{{ userInfo.nickname || userInfo.username || '非遗体验官' }}</text>
           <view class="user-score-row">
             <text class="user-score-label">累计积分</text>
             <text class="user-score-value">{{ totalScore }}</text>
           </view>
         </view>
+        <text class="user-edit-hint">编辑资料 ›</text>
       </view>
     </view>
 
     <!-- ===== 功能列表 ===== -->
     <view class="menu-list card">
+      <view class="menu-item" v-if="isLogin" @click="goEditProfile">
+        <view class="menu-icon" style="background: linear-gradient(135deg, #9c6b9e, #b98cb9)">
+          <text>👤</text>
+        </view>
+        <text class="flex-1 menu-name">个人信息</text>
+        <text class="menu-arrow">›</text>
+      </view>
       <view class="menu-item" @click="goWorks">
         <view class="menu-icon" style="background: linear-gradient(135deg, #b03a2e, #d45a4a)">
           <text>🗂️</text>
@@ -94,6 +102,9 @@ const totalScore = computed(() => userStore.totalScore)
 /* ---------- 页面跳转 ---------- */
 function goLogin() {
   uni.navigateTo({ url: '/pages/login/login' })
+}
+function goEditProfile() {
+  uni.navigateTo({ url: '/pages/profile/edit-profile' })
 }
 function goWorks() {
   uni.navigateTo({ url: '/pages/profile/works' })
@@ -281,6 +292,12 @@ onShow(() => {})
   font-size: 32rpx;
   font-weight: 700;
   color: #fff;
+  margin-left: 12rpx;
+}
+.user-edit-hint {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.85);
+  flex-shrink: 0;
   margin-left: 12rpx;
 }
 

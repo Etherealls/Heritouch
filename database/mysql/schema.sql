@@ -62,14 +62,15 @@ CREATE TABLE IF NOT EXISTS `inheritor` (
 -- 3. 系统用户表：微信登录用户，score 为闯关累计积分
 -- ---------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sys_user` (
-  `id`          BIGINT       NOT NULL AUTO_INCREMENT            COMMENT '用户ID',
-  `openid`      VARCHAR(100) NOT NULL                           COMMENT '微信 openid / 设备唯一标识',
-  `nickname`    VARCHAR(50)  NULL                               COMMENT '昵称',
-  `avatar`      VARCHAR(255) NULL                               COMMENT '头像URL',
-  `score`       INT          NOT NULL DEFAULT 0                 COMMENT '累计积分',
-  `create_time` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
+  `id`            BIGINT       NOT NULL AUTO_INCREMENT            COMMENT '用户ID',
+  `username`      VARCHAR(100) NOT NULL                           COMMENT '用户名（唯一标识）',
+  `password_hash` VARCHAR(255) NOT NULL                           COMMENT '密码哈希（PBKDF2）',
+  `nickname`      VARCHAR(50)  NULL                               COMMENT '昵称',
+  `avatar`        VARCHAR(255) NULL                               COMMENT '头像URL',
+  `score`         INT          NOT NULL DEFAULT 0                 COMMENT '累计积分',
+  `create_time`   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_openid` (`openid`)
+  UNIQUE KEY `uk_username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='系统用户表';
 
 -- ---------------------------------------------------------------------

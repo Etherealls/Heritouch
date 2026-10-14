@@ -1,4 +1,4 @@
-"""用户接口：登录 / 信息 / 资料 / 收藏。"""
+"""用户接口：注册 / 登录 / 信息 / 资料 / 密码 / 收藏。"""
 from __future__ import annotations
 
 import logging
@@ -9,11 +9,11 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user, get_db
-from app.core.security import create_token, generate_device_openid
+from app.core.security import create_token, hash_password, verify_password
 from app.models.game import GameRecord
 from app.models.user import SysUser, UserFavorite, UserWork, WrongQuestion
 from app.schemas.common import ok
-from app.schemas.user import FavoriteIn, LoginIn, ProfileIn
+from app.schemas.user import FavoriteIn, LoginIn, PasswordIn, ProfileIn, RegisterIn
 
 logger = logging.getLogger("heritouch.api.user")
 
@@ -24,11 +24,11 @@ FAVORITE_TYPES = ("project", "inheritor", "work")
 
 
 def _user_dict(user: SysUser) -> dict[str, Any]:
-    """用户 ORM → 响应字典。"""
+    """用户 ORM → 响应字典（不含密码哈希）。"""
     return {
         "id": user.id,
-        "openid": user.openid,
-        "nickname": user.nickname or "非遗体验官",
+        "username": user.username,
+        "nickname": user.nickname or user.username,
         "avatar": user.avatar or "",
         "score": user.score,
         "create_time": user.create_time.strftime("%Y-%m-%d %H:%M:%S")
@@ -37,30 +37,42 @@ def _user_dict(user: SysUser) -> dict[str, Any]:
     }
 
 
-@router.post("/login", summary="登录 / 注册")
-def login(body: LoginIn, db: Session = Depends(get_db)) -> dict[str, Any]:
-    """微信 openid 或设备标识登录；openid 为空时生成设备唯一标识。
-
-    返回用户信息 + token（token 一并放入 user 对象，前端 store 直接消费）。
-    """
-    openid = (body.openid or "").strip() or generate_device_openid()
-    user = db.execute(select(SysUser).where(SysUser.openid == openid)).scalars().first()
-    if user is None:
-        user = SysUser(
-            openid=openid,
-            nickname=body.nickname or "非遗体验官",
-            avatar=body.avatar or "",
-            score=0,
-        )
-        db.add(user)
-    else:
-        # 已存在用户：更新前端传入的资料
-        if body.nickname:
-            user.nickname = body.nickname
-        if body.avatar:
-            user.avatar = body.avatar
+@router.post("/register", summary="用户注册")
+def register(body: RegisterIn, db: Session = Depends(get_db)) -> dict[str, Any]:
+    """用户名 + 密码注册；用户名唯一，注册成功后直接返回登录态（token）。"""
+    username = body.username.strip()
+    # 用户名唯一校验
+    exists = (
+        db.execute(select(SysUser).where(SysUser.username == username)).scalars().first()
+    )
+    if exists is not None:
+        raise HTTPException(status_code=409, detail="用户名已存在，请更换")
+    user = SysUser(
+        username=username,
+        password_hash=hash_password(body.password),
+        nickname=body.nickname.strip() or username,
+        avatar=body.avatar or "",
+        score=0,
+    )
+    db.add(user)
     db.commit()
     db.refresh(user)
+    data = _user_dict(user)
+    data["token"] = create_token(user.id)
+    return ok(data)
+
+
+@router.post("/login", summary="用户登录")
+def login(body: LoginIn, db: Session = Depends(get_db)) -> dict[str, Any]:
+    """用户名 + 密码登录；校验通过返回用户信息 + token。"""
+    username = body.username.strip()
+    user = (
+        db.execute(select(SysUser).where(SysUser.username == username)).scalars().first()
+    )
+    if user is None:
+        raise HTTPException(status_code=401, detail="用户名或密码错误")
+    if not verify_password(body.password, user.password_hash):
+        raise HTTPException(status_code=401, detail="用户名或密码错误")
     data = _user_dict(user)
     data["token"] = create_token(user.id)
     return ok(data)
@@ -128,6 +140,20 @@ def update_profile(
     db.commit()
     db.refresh(user)
     return ok(_user_dict(user))
+
+
+@router.put("/password", summary="修改密码")
+def update_password(
+    body: PasswordIn,
+    db: Session = Depends(get_db),
+    user: SysUser = Depends(get_current_user),
+) -> dict[str, Any]:
+    """修改密码（需登录，验证旧密码后更新为新密码）。"""
+    if not verify_password(body.old_password, user.password_hash):
+        raise HTTPException(status_code=400, detail="旧密码不正确")
+    user.password_hash = hash_password(body.new_password)
+    db.commit()
+    return ok({"updated": True})
 
 
 @router.post("/favorite", summary="添加收藏")

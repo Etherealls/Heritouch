@@ -29,13 +29,13 @@ function request(options) {
         if (res.statusCode >= 200 && res.statusCode < 300 && (body.code === 0 || body.code === undefined || body.code === 200)) {
           resolve(body.data !== undefined ? body.data : body)
         } else {
-          const msg = body.message || body.msg || `请求失败(${res.statusCode})`
+          const msg = body.message || body.msg || `数据获取失败(${res.statusCode})`
           uni.showToast({ title: msg, icon: 'none' })
           reject(new Error(msg))
         }
       },
       fail(err) {
-        uni.showToast({ title: '网络异常，请检查服务器地址', icon: 'none' })
+        uni.showToast({ title: '数据获取失败，请检查网络或服务器地址', icon: 'none' })
         reject(err)
       }
     })
@@ -47,11 +47,6 @@ export const http = {
   post: (url, data) => request({ url, method: 'POST', data }),
   put: (url, data) => request({ url, method: 'PUT', data }),
   del: (url, data) => request({ url, method: 'DELETE', data })
-}
-
-/** 模拟网络延迟（Mock 模式下使用） */
-export function mockDelay(ms = 350) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 export default request

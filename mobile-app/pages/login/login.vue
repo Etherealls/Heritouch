@@ -9,40 +9,82 @@
       <text class="brand-slogan">可查询 · 可互动 · 可创作 · 可游玩</text>
     </view>
 
-    <!-- ===== 头像选择 ===== -->
-    <view class="avatar-area">
-      <view class="avatar-picker" @click="chooseAvatar">
-        <image v-if="avatar" class="avatar-img" :src="avatar" mode="aspectFill" />
-        <block v-else>
-          <text class="avatar-placeholder">👤</text>
-          <text class="avatar-tip">选择头像</text>
-        </block>
+    <!-- ===== 登录/注册切换 ===== -->
+    <view class="tab-switch">
+      <view class="tab-item" :class="{ active: mode === 'login' }" @click="switchMode('login')">
+        <text>登录</text>
       </view>
-      <text class="avatar-note">头像可选，不选则使用默认头像</text>
+      <view class="tab-item" :class="{ active: mode === 'register' }" @click="switchMode('register')">
+        <text>注册</text>
+      </view>
     </view>
 
-    <!-- ===== 昵称输入 ===== -->
+    <!-- ===== 表单 ===== -->
     <view class="form card">
-      <text class="form-label">昵称</text>
-      <input
-        class="nickname-input"
-        type="text"
-        v-model="nickname"
-        placeholder="默认“非遗体验官”"
-        placeholder-class="input-placeholder"
-        :maxlength="16"
-      />
-
-      <!-- 登录按钮 -->
-      <view class="btn-primary login-btn" :class="{ disabled: submitting }" @click="onWechatLogin">
-        <text>{{ submitting ? '登录中…' : '微信一键登录' }}</text>
+      <!-- 用户名 -->
+      <view class="field">
+        <text class="field-label">用户名</text>
+        <input
+          class="field-input"
+          type="text"
+          v-model="username"
+          placeholder="请输入用户名"
+          placeholder-class="input-placeholder"
+          :maxlength="30"
+        />
       </view>
-      <view class="btn-primary guest-btn" :class="{ disabled: submitting }" @click="onGuestLogin">
-        <text>游客体验</text>
+
+      <!-- 密码 -->
+      <view class="field">
+        <text class="field-label">密码</text>
+        <input
+          class="field-input"
+          :password="!showPassword"
+          type="text"
+          v-model="password"
+          placeholder="请输入密码（至少 6 位）"
+          placeholder-class="input-placeholder"
+          :maxlength="50"
+        />
+      </view>
+
+      <!-- 注册模式额外字段 -->
+      <template v-if="mode === 'register'">
+        <!-- 确认密码 -->
+        <view class="field">
+          <text class="field-label">确认密码</text>
+          <input
+            class="field-input"
+            :password="!showPassword"
+            type="text"
+            v-model="confirmPassword"
+            placeholder="请再次输入密码"
+            placeholder-class="input-placeholder"
+            :maxlength="50"
+          />
+        </view>
+
+        <!-- 昵称（可选） -->
+        <view class="field">
+          <text class="field-label">昵称（可选）</text>
+          <input
+            class="field-input"
+            type="text"
+            v-model="nickname"
+            placeholder="默认使用用户名"
+            placeholder-class="input-placeholder"
+            :maxlength="16"
+          />
+        </view>
+      </template>
+
+      <!-- 提交按钮 -->
+      <view class="btn-primary submit-btn" :class="{ disabled: submitting }" @click="onSubmit">
+        <text>{{ submitting ? '提交中…' : (mode === 'login' ? '登录' : '注册') }}</text>
       </view>
     </view>
 
-    <!-- 协议提示 -->
+    <!-- 提示 -->
     <view class="agreement">
       <text class="agreement-text">登录即代表同意《用户协议》与《隐私政策》</text>
     </view>
@@ -54,78 +96,77 @@
 <script setup>
 import { ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
-import { login } from '@/api/user'
+import { login, register } from '@/api/user'
 
 /* ---------- 数据 ---------- */
-const nickname = ref('非遗体验官')
-const avatar = ref('')
+const mode = ref('login') // 'login' | 'register'
+const username = ref('')
+const password = ref('')
+const confirmPassword = ref('')
+const nickname = ref('')
+const showPassword = ref(false)
 const submitting = ref(false)
 
 /* ---------- 交互 ---------- */
 
-/* 选择头像（相册或拍照） */
-function chooseAvatar() {
-  uni.chooseImage({
-    count: 1,
-    sizeType: ['compressed'],
-    sourceType: ['album', 'camera'],
-    success(res) {
-      avatar.value = res.tempFilePaths[0]
-    },
-    fail() {
-      // 用户取消不提示
-    }
-  })
+/* 切换登录/注册模式 */
+function switchMode(m) {
+  if (mode.value === m) return
+  mode.value = m
+  // 切换时清空密码相关字段，避免混淆
+  password.value = ''
+  confirmPassword.value = ''
 }
 
-/* 执行登录（成功后回到个人中心） */
-async function doLogin(payload) {
-  if (submitting.value) return // 防重复提交
+/* 提交（登录或注册） */
+async function onSubmit() {
+  if (submitting.value) return
+
+  // 基础校验
+  const name = username.value.trim()
+  if (!name) {
+    uni.showToast({ title: '请输入用户名', icon: 'none' })
+    return
+  }
+  if (!password.value) {
+    uni.showToast({ title: '请输入密码', icon: 'none' })
+    return
+  }
+
+  // 注册额外校验
+  if (mode.value === 'register') {
+    if (password.value.length < 6) {
+      uni.showToast({ title: '密码至少 6 位', icon: 'none' })
+      return
+    }
+    if (password.value !== confirmPassword.value) {
+      uni.showToast({ title: '两次输入的密码不一致', icon: 'none' })
+      return
+    }
+  }
+
   submitting.value = true
   try {
-    await login({
-      nickname: nickname.value.trim() || '非遗体验官',
-      avatar: avatar.value
-    })
-    uni.showToast({ title: '登录成功', icon: 'success' })
+    if (mode.value === 'login') {
+      await login({ username: name, password: password.value })
+      uni.showToast({ title: '登录成功', icon: 'success' })
+    } else {
+      await register({
+        username: name,
+        password: password.value,
+        nickname: nickname.value.trim()
+      })
+      uni.showToast({ title: '注册成功', icon: 'success' })
+    }
     // 延迟跳转，让 toast 展示完成
     setTimeout(() => {
       uni.switchTab({ url: '/pages/profile/profile' })
-    }, 500)
+    }, 600)
   } catch (e) {
-    uni.showToast({ title: '登录失败，请重试', icon: 'none' })
+    // 错误信息已在 request 层 toast 提示，这里不再重复
   } finally {
     submitting.value = false
   }
-}
-
-/* 微信一键登录 */
-function onWechatLogin() {
-  // #ifdef MP-WEIXIN
-  // 小程序端：尝试获取微信用户信息
-  uni.getUserProfile({
-    desc: '用于完善个人资料',
-    success(res) {
-      const info = res.userInfo || {}
-      if (info.nickName) nickname.value = info.nickName
-      if (info.avatarUrl) avatar.value = info.avatarUrl
-      doLogin({})
-    },
-    fail() {
-      // 用户拒绝授权：使用输入的昵称登录
-      doLogin({})
-    }
-  })
-  // #endif
-  // #ifndef MP-WEIXIN
-  // 其他平台：直接使用输入的昵称与头像登录
-  doLogin({})
-  // #endif
-}
-
-/* 游客体验 */
-function onGuestLogin() {
-  doLogin({})
 }
 
 /* ---------- 生命周期 ---------- */
@@ -153,94 +194,85 @@ onLoad(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 72rpx 0 56rpx;
+  padding: 48rpx 0 40rpx;
 }
 .brand-logo {
-  width: 136rpx;
-  height: 136rpx;
-  border-radius: 32rpx;
+  width: 128rpx;
+  height: 128rpx;
+  border-radius: 30rpx;
   background: linear-gradient(135deg, $primary, $primary-light);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 72rpx;
+  font-size: 68rpx;
   font-weight: 700;
   color: #fff;
   box-shadow: 0 16rpx 40rpx rgba(176, 58, 46, 0.3);
 }
 .brand-title {
   display: block;
-  font-size: 42rpx;
+  font-size: 40rpx;
   font-weight: 700;
   color: $ink;
-  margin-top: 28rpx;
+  margin-top: 24rpx;
   letter-spacing: 2rpx;
 }
 .brand-slogan {
   display: block;
   font-size: 22rpx;
   color: $ink-light;
-  margin-top: 12rpx;
+  margin-top: 10rpx;
   letter-spacing: 4rpx;
 }
 
-/* ---------- 头像选择 ---------- */
-.avatar-area {
+/* ---------- 登录/注册切换 ---------- */
+.tab-switch {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 40rpx;
-}
-.avatar-picker {
-  display: flex;
-  flex-direction: column;
-  width: 168rpx;
-  height: 168rpx;
-  border-radius: 50%;
+  flex-direction: row;
+  margin-bottom: 28rpx;
   background: $card;
-  border: 2rpx dashed #d8cdb8;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  border-radius: $radius-pill;
+  padding: 6rpx;
   box-shadow: $shadow-xs;
 }
-.avatar-img {
-  width: 100%;
-  height: 100%;
+.tab-item {
+  flex: 1;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-pill;
 }
-.avatar-placeholder {
-  font-size: 60rpx;
-  display: block;
-  text-align: center;
-}
-.avatar-tip {
-  display: block;
-  font-size: 20rpx;
+.tab-item text {
+  font-size: 28rpx;
   color: $ink-light;
-  text-align: center;
-  margin-top: 4rpx;
+  font-weight: 500;
 }
-.avatar-note {
-  display: block;
-  font-size: 20rpx;
-  color: $ink-faint;
-  margin-top: 16rpx;
+.tab-item.active {
+  background: linear-gradient(135deg, $primary, $primary-light);
+}
+.tab-item.active text {
+  color: #fff;
+  font-weight: 600;
 }
 
 /* ---------- 表单 ---------- */
 .form {
-  padding: 40rpx;
+  padding: 36rpx 32rpx;
   border-radius: $radius-xl;
   box-shadow: $shadow-card;
 }
-.form-label {
+.field {
+  margin-bottom: 28rpx;
+}
+.field-label {
   display: block;
   font-size: 26rpx;
   font-weight: 600;
   color: $ink;
-  margin-bottom: 16rpx;
+  margin-bottom: 14rpx;
 }
-.nickname-input {
+.field-input {
   width: 100%;
   height: 88rpx;
   background: $paper;
@@ -252,30 +284,15 @@ onLoad(() => {
   box-sizing: border-box;
 }
 .input-placeholder {
-  font-size: 28rpx;
+  font-size: 26rpx;
   color: $ink-faint;
 }
 
-/* 登录按钮 */
-.login-btn {
-  margin-top: 40rpx;
+/* 提交按钮 */
+.submit-btn {
+  margin-top: 12rpx;
   min-height: 92rpx;
   line-height: 92rpx;
-}
-.guest-btn {
-  margin-top: 20rpx;
-  min-height: 92rpx;
-  line-height: 92rpx;
-  background: $card;
-  border: 2rpx solid $primary;
-  color: $primary;
-  box-shadow: none;
-}
-.guest-btn::after {
-  border: none;
-}
-.guest-btn text {
-  color: $primary;
 }
 .btn-primary.disabled {
   opacity: 0.7;
@@ -285,7 +302,7 @@ onLoad(() => {
 .agreement {
   display: flex;
   justify-content: center;
-  margin-top: 48rpx;
+  margin-top: 40rpx;
 }
 .agreement-text {
   font-size: 20rpx;

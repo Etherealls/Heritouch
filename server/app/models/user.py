@@ -11,12 +11,13 @@ from app.core.database import Base
 
 
 class SysUser(Base):
-    """系统用户表：微信登录用户，score 为闯关累计积分。"""
+    """系统用户表：用户名 + 密码注册登录，score 为闯关累计积分。"""
 
     __tablename__ = "sys_user"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True, comment="用户ID")
-    openid: Mapped[str] = mapped_column(String(100), unique=True, comment="微信 openid / 设备唯一标识")
+    username: Mapped[str] = mapped_column(String(100), unique=True, comment="用户名（唯一标识）")
+    password_hash: Mapped[str] = mapped_column(String(255), comment="密码哈希（PBKDF2）")
     nickname: Mapped[Optional[str]] = mapped_column(String(50), comment="昵称")
     avatar: Mapped[Optional[str]] = mapped_column(String(255), comment="头像URL")
     score: Mapped[int] = mapped_column(Integer, default=0, comment="累计积分")

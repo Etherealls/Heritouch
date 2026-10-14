@@ -135,8 +135,8 @@ import { getCategories, getProjectList } from '@/api/heritage'
 const categories = ref([])
 const featured = ref([])
 const knowledge = ref({
-  text: '扬州剪纸以"细、秀、雅、活"著称，早期多用作刺绣底样，因此又称"剪纸绣样"，2006 年列入第一批国家级非物质文化遗产名录。',
-  source: '《扬州非遗名录》'
+  text: '',
+  source: ''
 })
 
 function coverGradient(id) {
@@ -184,6 +184,14 @@ async function loadData() {
     const [cats, list] = await Promise.all([getCategories(), getProjectList({ page: 1, size: 6 })])
     categories.value = cats || []
     featured.value = (list && list.list) || []
+    // 非遗小知识：取列表第一个项目的简介
+    const first = featured.value[0]
+    if (first) {
+      knowledge.value = {
+        text: first.intro || '暂无简介',
+        source: first.name || '中国非物质文化遗产名录'
+      }
+    }
   } catch (e) {
     uni.showToast({ title: '数据加载失败', icon: 'none' })
   }

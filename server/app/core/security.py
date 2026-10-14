@@ -9,6 +9,7 @@ import base64
 import hashlib
 import hmac
 import json
+import os
 import time
 import uuid
 
@@ -76,6 +77,38 @@ def decode_token(token: str) -> int | None:
         return None
 
 
-def generate_device_openid() -> str:
-    """前端未提供 openid 时，生成设备唯一标识（与前端 dev_ 前缀风格一致）。"""
-    return f"dev_{uuid.uuid4().hex[:12]}"
+# ---------------------------------------------------------------------
+# 密码哈希（用户名 + 密码体系）
+# ---------------------------------------------------------------------
+# 采用 PBKDF2-HMAC-SHA256 加盐哈希（标准库实现，无第三方依赖），
+# 存储格式：pbkdf2_sha256$<迭代次数>$<盐(hex)>$<哈希(hex)>
+_PBKDF2_ITERATIONS = 200_000
+_SALT_BYTES = 16
+
+
+def hash_password(password: str) -> str:
+    """对明文密码做加盐哈希，返回可存储的字符串。"""
+    salt = os.urandom(_SALT_BYTES)
+    digest = hashlib.pbkdf2_hmac(
+        "sha256", password.encode("utf-8"), salt, _PBKDF2_ITERATIONS
+    )
+    return (
+        f"pbkdf2_sha256${_PBKDF2_ITERATIONS}$"
+        f"{salt.hex()}${digest.hex()}"
+    )
+
+
+def verify_password(password: str, stored: str) -> bool:
+    """校验明文密码与存储的哈希是否匹配；格式异常返回 False。"""
+    try:
+        algo, iterations, salt_hex, digest_hex = stored.split("$")
+        if algo != "pbkdf2_sha256":
+            return False
+        salt = bytes.fromhex(salt_hex)
+        expected = bytes.fromhex(digest_hex)
+        actual = hashlib.pbkdf2_hmac(
+            "sha256", password.encode("utf-8"), salt, int(iterations)
+        )
+        return hmac.compare_digest(actual, expected)
+    except (ValueError, TypeError):
+        return False

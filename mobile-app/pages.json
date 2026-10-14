@@ -127,6 +127,12 @@
       }
     },
     {
+      "path": "pages/profile/edit-profile",
+      "style": {
+        "navigationBarTitleText": "个人信息"
+      }
+    },
+    {
       "path": "pages/login/login",
       "style": {
         "navigationBarTitleText": "登录"
