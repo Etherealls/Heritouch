@@ -176,7 +176,7 @@ onLoad(() => {
   background: $card;
   /* 固定像素高度，避免 flex 链在 H5 上无法撑开导致 canvas 高度为 0 */
   height: 900rpx;
-  min-height: 900rpx;
+  // min-height: 900rpx;
 }
 .graph-loading {
   position: absolute;

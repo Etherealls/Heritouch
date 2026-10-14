@@ -182,7 +182,14 @@ def _extract_json(text: str) -> Optional[dict[str, Any]]:
 
 
 class TextProvider:
-    """文本生成 Provider：OpenAI 兼容接口（豆包/通义千问等），未配置则 Mock。"""
+    """文本生成 Provider：OpenAI 兼容接口（火山方舟豆包等），未配置则 Mock。
+
+    对接火山方舟（https://ark.cn-beijing.volces.com/api/v3）说明：
+    - base_url 即 API 地址，最终调用 {base_url}/chat/completions；
+    - AI_MODEL 支持两种写法：
+      1. 模型 ID（如 doubao-seed-2-0-code-preview-260215）；
+      2. 火山方舟「推理接入点」ID（如 ep-xxxxxxxx-xxxxx），二者均作为 model 字段透传。
+    """
 
     def __init__(self) -> None:
         self.enabled: bool = bool(settings.AI_API_KEY and settings.AI_BASE_URL)
@@ -190,32 +197,61 @@ class TextProvider:
         self.api_key: str = settings.AI_API_KEY
         self.model: str = settings.AI_MODEL
         self.timeout: float = settings.AI_TIMEOUT_SECONDS
+        # 复用一个连接池，避免每次调用重建连接（提升连续生成性能）
+        self._client = httpx.Client(timeout=self.timeout)
+        if self.enabled:
+            logger.info(
+                "AI 文本服务已启用：model=%s base_url=%s", self.model, self.base_url
+            )
+        else:
+            logger.info("AI 文本服务未配置（缺 AI_API_KEY 或 AI_BASE_URL），使用本地 Mock")
 
     def chat(self, system_prompt: str, user_prompt: str, temperature: float = 0.7) -> Optional[str]:
         """发起对话补全；不可用或调用失败返回 None（调用方走本地 Mock）。"""
         if not self.enabled:
-            logger.info("AI 文本服务未配置，使用本地 Mock 生成")
             return None
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json",
+        }
+        payload = {
+            "model": self.model,
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+            "temperature": temperature,
+        }
         try:
-            headers = {
-                "Authorization": f"Bearer {self.api_key}",
-                "Content-Type": "application/json",
-            }
-            payload = {
-                "model": self.model,
-                "messages": [
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt},
-                ],
-                "temperature": temperature,
-            }
-            with httpx.Client(timeout=self.timeout) as client:
-                resp = client.post(f"{self.base_url}/chat/completions", headers=headers, json=payload)
-                resp.raise_for_status()
-                data = resp.json()
-            return data["choices"][0]["message"]["content"]
-        except Exception as exc:  # noqa: BLE001 - 网络/协议错误统一降级
-            logger.warning("AI 文本调用失败，降级为本地 Mock：%s", exc)
+            resp = self._client.post(
+                f"{self.base_url}/chat/completions", headers=headers, json=payload
+            )
+            resp.raise_for_status()
+            data = resp.json()
+        except httpx.HTTPStatusError as exc:
+            # 打印火山方舟返回的具体错误体，便于排查鉴权/模型/配额问题
+            detail = exc.response.text[:500] if exc.response is not None else ""
+            logger.warning(
+                "AI 文本调用失败（HTTP %s），降级为本地 Mock：%s",
+                exc.response.status_code if exc.response is not None else "?",
+                detail,
+            )
+            return None
+        except Exception as exc:  # noqa: BLE001 - 网络/超时/协议错误统一降级
+            logger.warning("AI 文本调用异常，降级为本地 Mock：%s", exc)
+            return None
+
+        # 兼容 OpenAI 与火山方舟豆包返回结构
+        try:
+            message = data["choices"][0]["message"]
+            content = message.get("content")
+            # 豆包推理类模型（seed 系列）可能把思考过程放在 reasoning_content，正文在 content；
+            # 若 content 为空则回退到 reasoning_content，避免拿到空结果。
+            if not content:
+                content = message.get("reasoning_content")
+            return content
+        except (KeyError, IndexError, TypeError) as exc:
+            logger.warning("AI 文本响应结构异常，降级为本地 Mock：%s（响应=%s）", exc, str(data)[:300])
             return None
 
 

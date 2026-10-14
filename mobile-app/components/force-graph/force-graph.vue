@@ -442,7 +442,7 @@ onMounted(() => {
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 600rpx;
+  min-height: 900rpx;
 }
 .fg-canvas {
   position: absolute;
