@@ -2,6 +2,7 @@
   <view class="force-graph">
     <canvas
       class="fg-canvas"
+      type="2d"
       :canvas-id="canvasId"
       :id="canvasId"
       :disable-scroll="true"
@@ -240,8 +241,9 @@ let pinchStart = null
 let moved = false
 
 function getPos(e) {
-  const t = e.touches[0]
-  return { x: t.x, y: t.y }
+  const t = e.touches[0] || {}
+  // MP 端 canvas 触摸事件用 x/y，H5/APP 端用 clientX/clientY
+  return { x: t.x !== undefined ? t.x : t.clientX || 0, y: t.y !== undefined ? t.y : t.clientY || 0 }
 }
 
 function onTouchStart(e) {
@@ -249,15 +251,18 @@ function onTouchStart(e) {
   if (e.touches.length === 1) {
     lastTouch = getPos(e)
   } else if (e.touches.length === 2) {
-    const dx = e.touches[0].x - e.touches[1].x
-    const dy = e.touches[0].y - e.touches[1].y
+    const p0 = { x: e.touches[0].x !== undefined ? e.touches[0].x : e.touches[0].clientX || 0, y: e.touches[0].y !== undefined ? e.touches[0].y : e.touches[0].clientY || 0 }
+    const p1 = { x: e.touches[1].x !== undefined ? e.touches[1].x : e.touches[1].clientX || 0, y: e.touches[1].y !== undefined ? e.touches[1].y : e.touches[1].clientY || 0 }
+    const dx = p0.x - p1.x
+    const dy = p0.y - p1.y
     pinchStart = { dist: Math.sqrt(dx * dx + dy * dy), scale: view.scale }
   }
 }
 
 function onTouchMove(e) {
+  const tp = (t) => ({ x: t.x !== undefined ? t.x : t.clientX || 0, y: t.y !== undefined ? t.y : t.clientY || 0 })
   if (e.touches.length === 1 && lastTouch) {
-    const p = getPos(e)
+    const p = tp(e.touches[0])
     const dx = p.x - lastTouch.x
     const dy = p.y - lastTouch.y
     if (Math.abs(dx) + Math.abs(dy) > 3) moved = true
@@ -267,8 +272,10 @@ function onTouchMove(e) {
     draw()
   } else if (e.touches.length === 2 && pinchStart) {
     moved = true
-    const dx = e.touches[0].x - e.touches[1].x
-    const dy = e.touches[0].y - e.touches[1].y
+    const p0 = tp(e.touches[0])
+    const p1 = tp(e.touches[1])
+    const dx = p0.x - p1.x
+    const dy = p0.y - p1.y
     const dist = Math.sqrt(dx * dx + dy * dy)
     view.scale = Math.max(0.3, Math.min(3, (pinchStart.scale * dist) / pinchStart.dist))
     draw()
@@ -278,8 +285,12 @@ function onTouchMove(e) {
 function onTouchEnd(e) {
   // 点击命中检测（未拖动时视为点击）
   if (!moved && (!e.changedTouches || e.changedTouches.length === 1)) {
-    const t = e.changedTouches ? e.changedTouches[0] : null
-    if (t) hitTest(t.x, t.y)
+    const t = (e.changedTouches && e.changedTouches[0]) || null
+    if (t) {
+      const x = t.x !== undefined ? t.x : t.clientX || 0
+      const y = t.y !== undefined ? t.y : t.clientY || 0
+      hitTest(x, y)
+    }
   }
   lastTouch = null
   pinchStart = null
@@ -328,17 +339,31 @@ function resetView() {
 async function measure() {
   await nextTick()
   const query = uni.createSelectorQuery()
-  query.select('.' + 'fg-canvas').fields({ size: true }).exec((res) => {
+  // 必须同时请求 node 字段，否则 H5/APP 端拿不到 canvas 元素导致画布空白
+  query.select('.fg-canvas').fields({ node: true, size: true }).exec((res) => {
     if (!res || !res[0]) return
     canvasW.value = res[0].width
     canvasH.value = res[0].height
-    // 小程序 canvas 需要显式获取 context
-    // #ifdef MP-WEIXIN
-    ctx.value = uni.createCanvasContext(canvasId)
-    // #endif
-    // #ifndef MP-WEIXIN
-    ctx.value = res[0].node ? res[0].node.getContext('2d') : null
-    // #endif
+    const node = res[0].node
+    if (node && node.getContext) {
+      // 新版 type="2d" canvas：标准 HTML5 API，需按 DPR 放大物理像素保证清晰
+      const c2d = node.getContext('2d')
+      const dpr = (uni.getSystemInfoSync && uni.getSystemInfoSync().pixelRatio) || 2
+      if (node.width !== Math.round(res[0].width * dpr)) {
+        node.width = Math.round(res[0].width * dpr)
+        node.height = Math.round(res[0].height * dpr)
+        c2d.scale(dpr, dpr)
+      }
+      ctx.value = c2d
+    } else {
+      // 兜底：旧版 canvas 接口（微信小程序 / 低版本 runtime）
+      // #ifdef MP-WEIXIN || APP-PLUS
+      ctx.value = uni.createCanvasContext(canvasId)
+      // #endif
+      // #ifdef H5
+      ctx.value = uni.createCanvasContext(canvasId)
+      // #endif
+    }
     initSim()
     // 预热若干帧让布局快速收敛
     for (let i = 0; i < 60; i++) simulateStep()
