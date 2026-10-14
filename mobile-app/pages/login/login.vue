@@ -3,9 +3,9 @@
     <!-- ===== 品牌头 ===== -->
     <view class="brand">
       <view class="brand-logo">
-        <text>遗</text>
+        <image class="brand-logo-img" src="/static/logo.png" mode="aspectFit" />
       </view>
-      <text class="brand-title">Heritouch 非遗</text>
+      <text class="brand-title">指尖非遗</text>
       <text class="brand-slogan">可查询 · 可互动 · 可创作 · 可游玩</text>
     </view>
 
@@ -200,14 +200,17 @@ onLoad(() => {
   width: 128rpx;
   height: 128rpx;
   border-radius: 30rpx;
-  background: linear-gradient(135deg, $primary, $primary-light);
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 68rpx;
-  font-weight: 700;
-  color: #fff;
   box-shadow: 0 16rpx 40rpx rgba(176, 58, 46, 0.3);
+  overflow: hidden;
+}
+.brand-logo-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 30rpx;
 }
 .brand-title {
   display: block;

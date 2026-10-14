@@ -117,7 +117,7 @@ function goWrong() {
 /* 分享成绩 */
 function onShare() {
   shareText(
-    '我在 Heritouch 非遗闯关中获得 ' + score.value + ' 分！',
+    '我在 指尖非遗闯关中获得 ' + score.value + ' 分！',
     '等级：' + evaluation.value.replace(/[^\u4e00-\u9fa5]/g, '') + '，答对 ' + correct.value + '/' + total.value + ' 题'
   )
 }

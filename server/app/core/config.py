@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     )
 
     # ---------- 应用基础 ----------
-    APP_NAME: str = "Heritouch 地方非遗文化AI解码与传承平台"
+    APP_NAME: str = "指尖非遗 地方非遗文化AI解码与传承平台"
     APP_VERSION: str = "1.0.0"
     DEBUG: bool = False
 

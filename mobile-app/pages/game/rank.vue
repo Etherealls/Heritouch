@@ -80,7 +80,7 @@ function onShare() {
   const me = list.value.find((item) => item.me)
   const myScore = me ? me.score : 0
   const myRank = me ? me.rank : '-'
-  shareText('我在 Heritouch 非遗闯关中排名第 ' + myRank + '！', '累计积分 ' + myScore + ' 分，快来挑战我吧')
+  shareText('我在 指尖非遗闯关中排名第 ' + myRank + '！', '累计积分 ' + myScore + ' 分，快来挑战我吧')
 }
 
 /* ---------- 生命周期 ---------- */

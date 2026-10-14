@@ -1,8 +1,8 @@
-# Heritouch —— 地方非遗文化AI解码与传承平台（移动端）
+# 指尖非遗 —— 地方非遗文化AI解码与传承平台（移动端）
 
 [![技术栈](https://img.shields.io/badge/UniApp-Vue3-green)](https://uniapp.dcloud.net.cn/) [![后端](https://img.shields.io/badge/FastAPI-Python%203.10-teal)](https://fastapi.tiangolo.com/) [![数据库](https://img.shields.io/badge/MySQL%208.0-Neo4j%205-ChromaDB-blue)](https://www.mysql.com/)
 
-> 一句话简介：**Heritouch 是一款基于 UniApp 多端框架的地方非遗文化数字化平台，以扬州非遗为示范，融合知识图谱可视化、AI 互动创作、多模态智能导览与科普闯关，让非遗"看得见、听得懂、玩得动、传得开"。**
+> 一句话简介：**指尖非遗（Heritouch）是一款基于 UniApp 多端框架的地方非遗文化数字化平台，以扬州非遗为示范，融合知识图谱可视化、AI 互动创作、多模态智能导览与科普闯关，让非遗"看得见、听得懂、玩得动、传得开"。**
 
 ---
 

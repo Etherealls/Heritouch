@@ -80,7 +80,7 @@
 
     <!-- 底部版本信息 -->
     <view class="version-tip">
-      <text>Heritouch 非遗 v1.0.0</text>
+      <text>指尖非遗 v1.0.0</text>
     </view>
 
     <view class="bottom-gap safe-bottom"></view>

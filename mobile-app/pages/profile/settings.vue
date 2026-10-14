@@ -50,7 +50,7 @@
         <view class="about-logo-badge">
           <text>遗</text>
         </view>
-        <text class="about-name">Heritouch 非遗</text>
+        <text class="about-name">指尖非遗</text>
         <text class="about-version">版本 1.0.0</text>
       </view>
       <text class="about-desc">

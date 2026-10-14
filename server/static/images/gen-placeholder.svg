@@ -10,6 +10,6 @@
   <circle cx="256" cy="196" r="72" fill="none" stroke="#b03a2e" stroke-width="6"/>
   <path d="M232 172 L256 216 L280 172 M242 196 H270" stroke="#b03a2e" stroke-width="6" fill="none" stroke-linecap="round"/>
   <text x="256" y="330" text-anchor="middle" font-size="34" font-weight="700" fill="#5c5344" font-family="'PingFang SC','Microsoft YaHei',sans-serif">AI 生成占位图</text>
-  <text x="256" y="376" text-anchor="middle" font-size="20" fill="#9a7b3a" font-family="'PingFang SC','Microsoft YaHei',sans-serif">Heritouch 非遗 AI 创作</text>
+  <text x="256" y="376" text-anchor="middle" font-size="20" fill="#9a7b3a" font-family="'PingFang SC','Microsoft YaHei',sans-serif">指尖非遗 AI 创作</text>
   <text x="256" y="424" text-anchor="middle" font-size="16" fill="#b5aa96" font-family="'PingFang SC','Microsoft YaHei',sans-serif">配置 IMAGE_API_URL 后此处为真实生成结果</text>
 </svg>

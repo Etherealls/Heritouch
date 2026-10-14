@@ -82,7 +82,7 @@ export function shareText(title, summary) {
   // #endif
   // #ifndef MP-WEIXIN
   uni.setClipboardData({
-    data: `【${title}】${summary || ''} —— 来自 Heritouch 非遗App`,
+    data: `【${title}】${summary || ''} —— 来自 指尖非遗App`,
     success: () => uni.showToast({ title: '链接已复制，可分享给好友', icon: 'none' })
   })
   // #endif

@@ -6,10 +6,10 @@
       <view class="status-bar"></view>
       <view class="brand-row">
         <view class="brand-logo">
-          <text class="brand-logo-text">遗</text>
+          <image class="brand-logo-img" src="/static/logo.png" mode="aspectFit" />
         </view>
         <view class="flex-1">
-          <text class="brand-title">Heritouch 非遗</text>
+          <text class="brand-title">指尖非遗</text>
           <text class="brand-slogan">可查询 · 可互动 · 可创作 · 可游玩</text>
         </view>
       </view>
@@ -253,6 +253,11 @@ onShow(loadData)
   font-size: 52rpx;
   font-weight: 700;
   color: $primary;
+}
+.brand-logo-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 24rpx;
 }
 .brand-title {
   display: block;
