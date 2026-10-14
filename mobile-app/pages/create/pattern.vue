@@ -214,6 +214,7 @@ async function onSaveWork() {
   margin-top: 0;
 }
 .chip-row {
+  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
@@ -264,6 +265,7 @@ async function onSaveWork() {
   color: #b5aa96;
 }
 .prompt-count {
+  display: flex;
   flex-direction: row;
   justify-content: flex-end;
   margin-top: 8rpx;
@@ -285,6 +287,7 @@ async function onSaveWork() {
 
 /* ---------- loading ---------- */
 .loading {
+  display: flex;
   margin-top: 24rpx;
   align-items: center;
   padding: 56rpx 32rpx;
@@ -364,10 +367,12 @@ async function onSaveWork() {
 
 /* 结果操作按钮 */
 .result-actions {
+  display: flex;
   flex-direction: row;
   margin-top: 24rpx;
 }
 .action-btn {
+  display: flex;
   flex: 1;
   min-height: 80rpx;
   border-radius: 999rpx;

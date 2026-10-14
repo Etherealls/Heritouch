@@ -148,6 +148,7 @@ onLoad(() => {
 
 /* ---------- 品牌头 ---------- */
 .brand {
+  display: flex;
   flex-direction: column;
   align-items: center;
   padding: 64rpx 0 48rpx;
@@ -183,10 +184,12 @@ onLoad(() => {
 
 /* ---------- 头像选择 ---------- */
 .avatar-area {
+  display: flex;
   align-items: center;
   margin-bottom: 40rpx;
 }
 .avatar-picker {
+  display: flex;
   width: 160rpx;
   height: 160rpx;
   border-radius: 50%;
@@ -272,6 +275,7 @@ onLoad(() => {
 
 /* ---------- 协议提示 ---------- */
 .agreement {
+  display: flex;
   align-items: center;
   margin-top: 40rpx;
 }

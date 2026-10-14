@@ -174,6 +174,7 @@ onShow(() => {})
 
 /* ---------- 未登录卡片 ---------- */
 .login-card {
+  display: flex;
   flex-direction: row;
   align-items: center;
   min-height: 160rpx;
@@ -223,6 +224,7 @@ onShow(() => {})
   background: linear-gradient(135deg, #b03a2e 0%, #8e2b21 100%);
 }
 .user-card-body {
+  display: flex;
   position: relative;
   flex-direction: row;
   align-items: center;
@@ -248,6 +250,7 @@ onShow(() => {})
   max-width: 420rpx;
 }
 .user-score-row {
+  display: flex;
   flex-direction: row;
   align-items: baseline;
   margin-top: 12rpx;
@@ -273,6 +276,7 @@ onShow(() => {})
   padding: 8rpx 0;
 }
 .menu-item {
+  display: flex;
   flex-direction: row;
   align-items: center;
   min-height: 112rpx;
@@ -307,6 +311,7 @@ onShow(() => {})
 
 /* ---------- 版本信息 ---------- */
 .version-tip {
+  display: flex;
   align-items: center;
   margin-top: 48rpx;
 }

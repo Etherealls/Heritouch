@@ -133,6 +133,7 @@ onLoad(() => {
   white-space: nowrap;
 }
 .filter-row {
+  display: flex;
   flex-direction: row;
   padding: 20rpx 32rpx;
 }
@@ -182,6 +183,7 @@ onLoad(() => {
 
 /* ---------- 底部提示 ---------- */
 .tips-bar {
+  display: flex;
   padding: 20rpx 32rpx 32rpx;
   align-items: center;
 }

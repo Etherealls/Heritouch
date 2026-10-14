@@ -151,6 +151,7 @@ onShow(loadLevels)
   background: linear-gradient(135deg, #b03a2e 0%, #8e2b21 100%);
 }
 .score-card-body {
+  display: flex;
   position: relative;
   flex-direction: row;
   align-items: center;
@@ -161,6 +162,7 @@ onShow(loadLevels)
   color: rgba(255, 255, 255, 0.85);
 }
 .score-value-row {
+  display: flex;
   flex-direction: row;
   align-items: baseline;
   margin-top: 8rpx;
@@ -200,6 +202,7 @@ onShow(loadLevels)
   margin-bottom: 32rpx;
 }
 .entry-row {
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin-bottom: 24rpx;
@@ -246,6 +249,7 @@ onShow(loadLevels)
   margin-bottom: 20rpx;
 }
 .rule-item {
+  display: flex;
   flex-direction: row;
   align-items: flex-start;
   margin-bottom: 16rpx;

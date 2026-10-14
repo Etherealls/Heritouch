@@ -283,6 +283,7 @@ onReachBottom(() => {
 
 /* 搜索框 */
 .search-box {
+  display: flex;
   flex-direction: row;
   align-items: center;
   height: 80rpx;
@@ -306,6 +307,7 @@ onReachBottom(() => {
   color: #b5aa96;
 }
 .search-clear {
+  display: flex;
   width: 40rpx;
   height: 40rpx;
   border-radius: 50%;
@@ -325,6 +327,7 @@ onReachBottom(() => {
   white-space: nowrap;
 }
 .chip-row {
+  display: flex;
   flex-direction: row;
   padding-bottom: 4rpx;
 }
@@ -354,6 +357,7 @@ onReachBottom(() => {
 
 /* 级别 chips */
 .level-row {
+  display: flex;
   flex-direction: row;
   margin-top: 16rpx;
 }
@@ -365,6 +369,7 @@ onReachBottom(() => {
 
 /* 项目卡片 */
 .project-card {
+  display: flex;
   flex-direction: row;
   align-items: stretch;
   padding: 0;
@@ -407,6 +412,7 @@ onReachBottom(() => {
   color: $ink;
 }
 .project-meta {
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin-top: 10rpx;
@@ -429,6 +435,7 @@ onReachBottom(() => {
 
 /* 加载态卡片 */
 .loading-card {
+  display: flex;
   padding: 80rpx;
   align-items: center;
 }

@@ -114,6 +114,7 @@ function goWorks() {
   margin-bottom: 32rpx;
 }
 .feature-item {
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin-bottom: 24rpx;
@@ -152,6 +153,7 @@ function goWorks() {
 
 /* ---------- 我的作品入口 ---------- */
 .my-works {
+  display: flex;
   flex-direction: row;
   align-items: center;
   min-height: 112rpx;
@@ -175,6 +177,7 @@ function goWorks() {
 
 /* ---------- 合规提示 ---------- */
 .compliance {
+  display: flex;
   flex-direction: row;
   align-items: flex-start;
   margin-top: 32rpx;

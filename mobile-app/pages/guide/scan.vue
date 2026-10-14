@@ -128,6 +128,7 @@ function onManualResolve() {
 
 /* ---------- 说明卡 ---------- */
 .intro {
+  display: flex;
   align-items: center;
   padding: 56rpx 32rpx;
   margin-top: 24rpx;
@@ -158,6 +159,7 @@ function onManualResolve() {
 
 /* ---------- 扫码按钮 ---------- */
 .scan-btn {
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin-top: 32rpx;
@@ -187,6 +189,7 @@ function onManualResolve() {
 
 /* ---------- 解析中 ---------- */
 .resolving {
+  display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -230,6 +233,7 @@ function onManualResolve() {
   margin-top: 8rpx;
 }
 .manual-input-row {
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin-top: 20rpx;
@@ -249,6 +253,7 @@ function onManualResolve() {
   color: #b5aa96;
 }
 .manual-btn {
+  display: flex;
   min-width: 128rpx;
   height: 80rpx;
   border-radius: $radius-md;

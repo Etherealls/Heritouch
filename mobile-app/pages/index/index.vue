@@ -27,7 +27,7 @@
         <text class="section-title">非遗分类</text>
         <text class="section-more" @click="goList">全部 ›</text>
       </view>
-      <scroll-view scroll-x class="cat-scroll" :show-scrollbar="false">
+      <scroll-view scroll-x class="cat-scroll" :show-scrollbar="false" :enable-flex="true">
         <view class="cat-row">
           <view
             class="cat-item"
@@ -51,7 +51,7 @@
         <text class="section-title">精选非遗</text>
         <text class="section-more" @click="goList">更多 ›</text>
       </view>
-      <scroll-view scroll-x class="feature-scroll" :show-scrollbar="false" v-if="featured.length">
+      <scroll-view scroll-x class="feature-scroll" :show-scrollbar="false" :enable-flex="true" v-if="featured.length">
         <view class="feature-row">
           <view
             class="feature-card card"
@@ -244,6 +244,7 @@ onShow(loadData)
   color: $primary;
 }
 .brand-title-row {
+  display: flex;
   flex-direction: row;
   align-items: baseline;
 }
@@ -288,6 +289,7 @@ onShow(loadData)
   margin-top: 40rpx;
 }
 .section-header {
+  display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -321,13 +323,16 @@ onShow(loadData)
   width: 100%;
 }
 .cat-row {
+  display: flex;
   flex-direction: row;
   padding-bottom: 8rpx;
-}
+  width: max-content;}
 .cat-item {
+  display: flex;
   width: 160rpx;
   align-items: center;
   margin-right: 20rpx;
+  flex-shrink: 0;
 }
 .cat-icon {
   width: 96rpx;
@@ -356,14 +361,16 @@ onShow(loadData)
   width: 100%;
 }
 .feature-row {
+  display: flex;
   flex-direction: row;
   padding-bottom: 8rpx;
-}
+  width: max-content;}
 .feature-card {
   width: 300rpx;
   margin-right: 24rpx;
   padding: 0;
   overflow: hidden;
+  flex-shrink: 0;
 }
 .feature-cover {
   height: 200rpx;
@@ -443,6 +450,7 @@ onShow(loadData)
   border: 1rpx solid $border;
 }
 .knowledge-header {
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin-bottom: 16rpx;
@@ -470,6 +478,7 @@ onShow(loadData)
 
 /* ---------- 其他 ---------- */
 .loading-card {
+  display: flex;
   padding: 60rpx;
   align-items: center;
 }

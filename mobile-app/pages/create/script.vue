@@ -254,6 +254,7 @@ async function onSaveWork() {
   margin: 0;
 }
 .chip-row {
+  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
@@ -296,6 +297,7 @@ async function onSaveWork() {
 
 /* stepper 行 */
 .stepper-row {
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin-top: 28rpx;
@@ -307,6 +309,7 @@ async function onSaveWork() {
   margin-top: 4rpx;
 }
 .stepper {
+  display: flex;
   flex-direction: row;
   align-items: center;
   background: $paper;
@@ -315,6 +318,7 @@ async function onSaveWork() {
   padding: 6rpx;
 }
 .stepper-btn {
+  display: flex;
   width: 64rpx;
   height: 64rpx;
   border-radius: 50%;
@@ -341,6 +345,7 @@ async function onSaveWork() {
 
 /* switch 行 */
 .switch-row {
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin-top: 32rpx;
@@ -360,6 +365,7 @@ async function onSaveWork() {
 
 /* ---------- loading ---------- */
 .loading {
+  display: flex;
   margin-top: 24rpx;
   align-items: center;
   padding: 56rpx 32rpx;
@@ -395,6 +401,7 @@ async function onSaveWork() {
   padding: 32rpx;
 }
 .result-header {
+  display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -410,6 +417,7 @@ async function onSaveWork() {
   font-weight: 600;
 }
 .result-info {
+  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   margin-top: 12rpx;
@@ -425,6 +433,7 @@ async function onSaveWork() {
 
 /* 角色徽章 */
 .role-row {
+  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   margin-top: 20rpx;
@@ -449,11 +458,13 @@ async function onSaveWork() {
   border: 1rpx solid $border;
 }
 .scene-header {
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin-bottom: 12rpx;
 }
 .scene-index {
+  display: flex;
   width: 44rpx;
   height: 44rpx;
   border-radius: 12rpx;
@@ -481,10 +492,12 @@ async function onSaveWork() {
 
 /* 操作按钮 */
 .result-actions {
+  display: flex;
   flex-direction: row;
   margin-top: 32rpx;
 }
 .action-btn {
+  display: flex;
   flex: 1;
   min-height: 80rpx;
   border-radius: 999rpx;

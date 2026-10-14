@@ -257,6 +257,7 @@ async function onSaveWork() {
 
 /* segmented 模式切换 */
 .segmented {
+  display: flex;
   flex-direction: row;
   background: $paper;
   border: 1rpx solid $border;
@@ -265,6 +266,7 @@ async function onSaveWork() {
   margin-bottom: 8rpx;
 }
 .segment-item {
+  display: flex;
   flex: 1;
   min-height: 72rpx;
   border-radius: 999rpx;
@@ -285,6 +287,7 @@ async function onSaveWork() {
 
 /* chips */
 .chip-row {
+  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
@@ -326,6 +329,7 @@ async function onSaveWork() {
   color: #b5aa96;
 }
 .prompt-count {
+  display: flex;
   flex-direction: row;
   justify-content: flex-end;
   margin-top: 8rpx;
@@ -337,6 +341,7 @@ async function onSaveWork() {
 
 /* 上传区 */
 .upload-box {
+  display: flex;
   min-height: 320rpx;
   border-radius: $radius-md;
   border: 2rpx dashed #d8cdb8;
@@ -370,6 +375,7 @@ async function onSaveWork() {
   margin-top: 6rpx;
 }
 .upload-actions {
+  display: flex;
   flex-direction: row;
   margin-top: 16rpx;
 }
@@ -400,6 +406,7 @@ async function onSaveWork() {
 
 /* ---------- loading ---------- */
 .loading {
+  display: flex;
   margin-top: 24rpx;
   align-items: center;
   padding: 56rpx 32rpx;
@@ -486,10 +493,12 @@ async function onSaveWork() {
 
 /* 操作按钮 */
 .result-actions {
+  display: flex;
   flex-direction: row;
   margin-top: 24rpx;
 }
 .action-btn {
+  display: flex;
   flex: 1;
   min-height: 80rpx;
   border-radius: 999rpx;

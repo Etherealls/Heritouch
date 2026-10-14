@@ -161,6 +161,7 @@ onShow(() => {
 
 /* 设置行 */
 .setting-row {
+  display: flex;
   flex-direction: row;
   align-items: center;
   min-height: 88rpx;
@@ -188,6 +189,7 @@ onShow(() => {
 
 /* ---------- 服务器地址 ---------- */
 .server-row {
+  display: flex;
   flex-direction: row;
   align-items: center;
 }
@@ -206,6 +208,7 @@ onShow(() => {
   color: #b5aa96;
 }
 .save-btn {
+  display: flex;
   min-width: 120rpx;
   height: 80rpx;
   border-radius: $radius-md;
@@ -228,10 +231,12 @@ onShow(() => {
 
 /* ---------- 关于 ---------- */
 .about {
+  display: flex;
   align-items: center;
   padding: 44rpx 28rpx;
 }
 .about-logo {
+  display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 20rpx;
@@ -269,6 +274,7 @@ onShow(() => {
   text-align: center;
 }
 .tech-row {
+  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;

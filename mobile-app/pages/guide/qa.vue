@@ -251,10 +251,12 @@ onUnload(() => {
 
 /* ---------- 按住说话 ---------- */
 .voice-area {
+  display: flex;
   align-items: center;
   margin-top: 40rpx;
 }
 .voice-btn {
+  display: flex;
   width: 220rpx;
   height: 220rpx;
   border-radius: 50%;
@@ -289,6 +291,7 @@ onUnload(() => {
 
 /* ---------- 文字输入 ---------- */
 .text-input-area {
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin-top: 32rpx;
@@ -305,6 +308,7 @@ onUnload(() => {
   color: #b5aa96;
 }
 .send-btn {
+  display: flex;
   min-width: 128rpx;
   height: 72rpx;
   border-radius: 999rpx;
@@ -343,6 +347,7 @@ onUnload(() => {
   line-height: 1.6;
 }
 .answer-header {
+  display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -369,6 +374,7 @@ onUnload(() => {
   line-height: 1.8;
 }
 .answer-loading {
+  display: flex;
   flex-direction: row;
   align-items: center;
   font-size: 24rpx;
@@ -402,6 +408,7 @@ onUnload(() => {
   margin-bottom: 20rpx;
 }
 .chip-row {
+  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
