@@ -223,8 +223,8 @@ onUnload(() => {
 .play {
   min-height: 100vh;
   background: $paper;
-  padding: 32rpx;
-  padding-bottom: 120rpx;
+  padding: 40rpx;
+  padding-bottom: 140rpx;
 }
 
 /* ---------- 加载态 ---------- */
@@ -233,6 +233,7 @@ onUnload(() => {
   padding: 120rpx 32rpx;
   align-items: center;
   margin-top: 100rpx;
+  border-radius: $radius-xl;
 }
 .loading-text {
   font-size: 26rpx;
@@ -252,6 +253,8 @@ onUnload(() => {
 /* ---------- 顶部进度 ---------- */
 .progress-header {
   padding: 24rpx 28rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .progress-info {
   display: flex;
@@ -287,6 +290,8 @@ onUnload(() => {
 .question {
   margin-top: 24rpx;
   padding: 28rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .question-type-row {
   display: flex;
@@ -362,12 +367,14 @@ onUnload(() => {
   flex-direction: row;
   align-items: center;
   background: $card;
-  border-radius: $radius-md;
+  border-radius: $radius-lg;
   padding: 24rpx 28rpx;
   margin-bottom: 16rpx;
   border: 2rpx solid transparent;
   min-height: 100rpx;
   box-shadow: $shadow-card;
+  transition: all 0.15s ease;
+  &:active { transform: scale(0.99); }
 }
 .option-letter {
   display: flex;
@@ -436,11 +443,13 @@ onUnload(() => {
   align-items: center;
   justify-content: center;
   background: $card;
-  border-radius: $radius-md;
+  border-radius: $radius-lg;
   padding: 40rpx 0;
   border: 2rpx solid transparent;
   min-height: 200rpx;
   box-shadow: $shadow-card;
+  transition: all 0.15s ease;
+  &:active { transform: scale(0.99); }
 }
 .judge-btn + .judge-btn {
   margin-left: 20rpx;
@@ -488,6 +497,7 @@ onUnload(() => {
 .feedback {
   margin-top: 24rpx;
   padding: 24rpx 28rpx;
+  border-radius: $radius-xl;
 }
 .feedback-correct {
   background: #eaf4ec;

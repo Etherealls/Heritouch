@@ -123,7 +123,7 @@ function onManualResolve() {
 .scan {
   min-height: 100vh;
   background: $paper;
-  padding: 32rpx;
+  padding: 40rpx;
 }
 
 /* ---------- 说明卡 ---------- */
@@ -132,6 +132,8 @@ function onManualResolve() {
   align-items: center;
   padding: 56rpx 32rpx;
   margin-top: 24rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .intro-icon {
   width: 128rpx;
@@ -165,6 +167,8 @@ function onManualResolve() {
   margin-top: 32rpx;
   min-height: 128rpx;
   padding: 24rpx 28rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .scan-btn-icon {
   width: 88rpx;
@@ -219,6 +223,8 @@ function onManualResolve() {
 .manual {
   margin-top: 32rpx;
   padding: 28rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .manual-title {
   display: block;
@@ -250,7 +256,7 @@ function onManualResolve() {
 }
 .manual-placeholder {
   font-size: 26rpx;
-  color: #b5aa96;
+  color: $ink-faint;
 }
 .manual-btn {
   display: flex;
@@ -274,6 +280,7 @@ function onManualResolve() {
   padding: 28rpx;
   background: #fdf6e8;
   border: 1rpx solid #f0e2c4;
+  border-radius: $radius-xl;
 }
 .demo-tip-title {
   display: block;

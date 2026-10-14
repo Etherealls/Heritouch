@@ -232,12 +232,14 @@ async function onSaveWork() {
 .script-page {
   min-height: 100vh;
   background: $paper;
-  padding: 32rpx;
+  padding: 40rpx;
 }
 
 /* ---------- 表单 ---------- */
 .form {
-  padding: 32rpx;
+  padding: 36rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .form-label {
   display: block;
@@ -261,7 +263,7 @@ async function onSaveWork() {
 .chip {
   display: inline-block;
   padding: 12rpx 28rpx;
-  border-radius: 999rpx;
+  border-radius: $radius-pill;
   background: $paper;
   border: 1rpx solid $border;
   font-size: 24rpx;
@@ -270,12 +272,14 @@ async function onSaveWork() {
   line-height: 40rpx;
   min-height: 64rpx;
   text-align: center;
+  transition: all 0.15s ease;
 }
 .chip.active {
-  background: $primary;
-  border-color: $primary;
+  background: linear-gradient(135deg, $primary, $primary-light);
+  border-color: transparent;
   color: #fff;
   font-weight: 600;
+  box-shadow: 0 4rpx 12rpx rgba(176, 58, 46, 0.22);
 }
 
 /* 主题输入 */
@@ -292,7 +296,7 @@ async function onSaveWork() {
 }
 .input-placeholder {
   font-size: 26rpx;
-  color: #b5aa96;
+  color: $ink-faint;
 }
 
 /* stepper 行 */
@@ -366,9 +370,12 @@ async function onSaveWork() {
 /* ---------- loading ---------- */
 .loading {
   display: flex;
+  flex-direction: column;
   margin-top: 24rpx;
   align-items: center;
   padding: 56rpx 32rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .loading-spinner {
   width: 64rpx;
@@ -398,7 +405,9 @@ async function onSaveWork() {
 /* ---------- 结果区 ---------- */
 .result {
   margin-top: 24rpx;
-  padding: 32rpx;
+  padding: 36rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .result-header {
   display: flex;
@@ -531,7 +540,7 @@ async function onSaveWork() {
 }
 .compliance-text {
   font-size: 20rpx;
-  color: #b5aa96;
+  color: $ink-faint;
   line-height: 1.6;
 }
 

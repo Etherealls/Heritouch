@@ -142,13 +142,13 @@ onLoad(async (query) => {
 .result {
   min-height: 100vh;
   background: $paper;
-  padding: 32rpx;
+  padding: 40rpx;
 }
 
 /* ---------- 分数展示 ---------- */
 .score-hero {
   position: relative;
-  border-radius: $radius-lg;
+  border-radius: $radius-xl;
   overflow: hidden;
   padding: 56rpx 36rpx;
   box-shadow: 0 12rpx 32rpx rgba(176, 58, 46, 0.22);
@@ -160,6 +160,16 @@ onLoad(async (query) => {
   right: 0;
   bottom: 0;
   background: linear-gradient(160deg, #b03a2e 0%, #8e2b21 100%);
+}
+.score-hero-bg::after {
+  content: '';
+  position: absolute;
+  top: -100rpx;
+  right: -60rpx;
+  width: 320rpx;
+  height: 320rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
 }
 .score-hero-body {
   display: flex;
@@ -239,10 +249,12 @@ onLoad(async (query) => {
   padding: 28rpx;
   background: linear-gradient(135deg, #fdf6e8, #f9edd6);
   border: 1rpx solid #f0e2c4;
+  border-radius: $radius-xl;
 }
 .unlock-tip.fail {
   background: $card;
   border: 1rpx solid $border;
+  box-shadow: $shadow-card;
 }
 .unlock-icon {
   font-size: 48rpx;
@@ -269,7 +281,7 @@ onLoad(async (query) => {
 .action-btn {
   display: flex;
   min-height: 92rpx;
-  border-radius: 999rpx;
+  border-radius: $radius-pill;
   align-items: center;
   justify-content: center;
 }
@@ -279,6 +291,7 @@ onLoad(async (query) => {
 }
 .action-btn.primary {
   background: linear-gradient(135deg, $primary, $primary-light);
+  box-shadow: 0 8rpx 20rpx rgba(176, 58, 46, 0.24);
 }
 .action-btn.primary text {
   color: #fff;

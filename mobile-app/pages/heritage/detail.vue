@@ -333,15 +333,26 @@ onLoad((query) => {
 
 /* ---------- 头部封面区 ---------- */
 .hero {
-  padding: 56rpx 32rpx 40rpx;
+  padding: 64rpx 40rpx 56rpx;
   position: relative;
+  overflow: hidden;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  top: -100rpx;
+  right: -60rpx;
+  width: 300rpx;
+  height: 300rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
 }
 .hero-fav {
   position: absolute;
-  top: 32rpx;
-  right: 32rpx;
-  width: 72rpx;
-  height: 72rpx;
+  top: 40rpx;
+  right: 40rpx;
+  width: 76rpx;
+  height: 76rpx;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.22);
   display: flex;
@@ -351,24 +362,25 @@ onLoad((query) => {
 }
 .hero-name {
   display: block;
-  font-size: 44rpx;
+  font-size: 46rpx;
   font-weight: 700;
   color: #fff;
-  line-height: 1.3;
+  line-height: 1.35;
   max-width: 560rpx;
+  letter-spacing: 1rpx;
 }
 .hero-tags {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-top: 16rpx;
+  margin-top: 20rpx;
 }
 .hero-level {
   font-size: 20rpx;
   color: #fff;
   background: rgba(0, 0, 0, 0.28);
-  border-radius: 999rpx;
-  padding: 6rpx 20rpx;
+  border-radius: $radius-pill;
+  padding: 8rpx 22rpx;
   margin-right: 16rpx;
 }
 .hero-batch {
@@ -381,8 +393,10 @@ onLoad((query) => {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin: 24rpx 32rpx 0;
-  padding: 24rpx 0;
+  margin: 28rpx 40rpx 0;
+  padding: 28rpx 0;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .info-item {
   display: flex;
@@ -401,7 +415,7 @@ onLoad((query) => {
   font-weight: 600;
   color: $ink;
   text-align: center;
-  margin-top: 6rpx;
+  margin-top: 8rpx;
 }
 .info-divider {
   width: 1rpx;
@@ -411,16 +425,17 @@ onLoad((query) => {
 
 /* ---------- 内容区块 ---------- */
 .section {
-  margin: 24rpx 32rpx 0;
+  margin: 28rpx 40rpx 0;
 }
 .section-title {
   display: block;
   font-size: 30rpx;
   font-weight: 700;
   color: $ink;
-  margin-bottom: 16rpx;
+  margin-bottom: 18rpx;
   position: relative;
   padding-left: 20rpx;
+  letter-spacing: 1rpx;
 }
 .section-title::before {
   content: '';
@@ -431,7 +446,7 @@ onLoad((query) => {
   width: 8rpx;
   height: 30rpx;
   border-radius: 4rpx;
-  background: $primary;
+  background: linear-gradient(180deg, $primary, $primary-light);
 }
 .section-title.plain {
   margin-bottom: 0;
@@ -441,12 +456,12 @@ onLoad((query) => {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20rpx;
+  margin-bottom: 24rpx;
 }
 .section-text {
   font-size: 26rpx;
   color: $ink;
-  line-height: 1.8;
+  line-height: 1.85;
 }
 
 /* 工艺流程步骤 */
@@ -614,38 +629,41 @@ onLoad((query) => {
   bottom: 0;
   flex-direction: row;
   align-items: center;
-  background: $card;
+  background: rgba(255, 255, 255, 0.96);
   border-top: 1rpx solid $border;
-  padding: 16rpx 32rpx 16rpx;
+  padding: 16rpx 40rpx;
   box-shadow: 0 -4rpx 24rpx rgba(61, 53, 41, 0.06);
+  backdrop-filter: blur(10px);
 }
 .action-btn {
   display: flex;
   flex: 1;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   min-height: 88rpx;
-  border-radius: $radius-md;
+  border-radius: $radius-pill;
 }
 .action-btn + .action-btn {
   margin-left: 16rpx;
 }
 .action-btn.primary {
   background: linear-gradient(135deg, $primary, $primary-light);
+  box-shadow: 0 8rpx 20rpx rgba(176, 58, 46, 0.26);
 }
 .action-icon {
-  font-size: 32rpx;
+  font-size: 30rpx;
 }
 .action-text {
-  display: block;
-  font-size: 20rpx;
+  font-size: 24rpx;
   color: $ink;
-  margin-top: 2rpx;
+  margin-left: 8rpx;
+  font-weight: 600;
 }
 .action-btn.primary .action-text {
   color: #fff;
 }
 .bottom-gap {
-  height: 160rpx;
+  height: 180rpx;
 }
 </style>

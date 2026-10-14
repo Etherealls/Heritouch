@@ -143,13 +143,15 @@ onShow(() => {
 .settings {
   min-height: 100vh;
   background: $paper;
-  padding: 32rpx;
+  padding: 40rpx;
 }
 
 /* ---------- 设置分组 ---------- */
 .group {
   padding: 28rpx;
   margin-bottom: 24rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .group-title {
   display: block;
@@ -205,7 +207,7 @@ onShow(() => {
 }
 .server-placeholder {
   font-size: 26rpx;
-  color: #b5aa96;
+  color: $ink-faint;
 }
 .save-btn {
   display: flex;
@@ -291,7 +293,7 @@ onShow(() => {
 .about-copyright {
   display: block;
   font-size: 20rpx;
-  color: #b5aa96;
+  color: $ink-faint;
   margin-top: 16rpx;
   text-align: center;
 }

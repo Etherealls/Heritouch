@@ -100,7 +100,7 @@ onLoad(async () => {
 .rank {
   min-height: 100vh;
   background: $paper;
-  padding: 32rpx;
+  padding: 40rpx;
 }
 
 /* ---------- 加载态 ---------- */
@@ -109,6 +109,7 @@ onLoad(async () => {
   padding: 120rpx 32rpx;
   align-items: center;
   margin-top: 100rpx;
+  border-radius: $radius-xl;
 }
 .loading-text {
   font-size: 26rpx;
@@ -118,6 +119,8 @@ onLoad(async () => {
 /* ---------- 排行榜 ---------- */
 .rank-list {
   padding: 8rpx 0;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .rank-item {
   display: flex;
@@ -195,6 +198,7 @@ onLoad(async () => {
   margin-top: 48rpx;
   min-height: 92rpx;
   line-height: 92rpx;
+  box-shadow: 0 8rpx 20rpx rgba(176, 58, 46, 0.24);
 }
 .share-btn text {
   color: #fff;

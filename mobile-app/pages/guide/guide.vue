@@ -334,7 +334,7 @@ onUnload(() => {
 .guide {
   min-height: 100vh;
   background: $paper;
-  padding: 32rpx;
+  padding: 40rpx;
 }
 
 /* ---------- 加载态 ---------- */
@@ -343,6 +343,7 @@ onUnload(() => {
   padding: 120rpx 32rpx;
   align-items: center;
   margin-top: 100rpx;
+  border-radius: $radius-xl;
 }
 .loading-text {
   font-size: 26rpx;
@@ -354,12 +355,14 @@ onUnload(() => {
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 24rpx;
+  padding: 28rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .project-cover {
   width: 120rpx;
   height: 120rpx;
-  border-radius: 24rpx;
+  border-radius: 28rpx;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -390,6 +393,8 @@ onUnload(() => {
   align-items: center;
   margin-top: 24rpx;
   padding: 28rpx 24rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .play-btn {
   width: 104rpx;
@@ -402,6 +407,8 @@ onUnload(() => {
   margin-right: 24rpx;
   flex-shrink: 0;
   box-shadow: 0 8rpx 20rpx rgba(176, 58, 46, 0.3);
+  transition: transform 0.1s ease;
+  &:active { transform: scale(0.94); }
 }
 .play-btn text {
   font-size: 40rpx;
@@ -432,13 +439,13 @@ onUnload(() => {
 }
 .progress-bar {
   height: 12rpx;
-  border-radius: 999rpx;
+  border-radius: $radius-pill;
   background: $border;
   overflow: hidden;
 }
 .progress-inner {
   height: 100%;
-  border-radius: 999rpx;
+  border-radius: $radius-pill;
   background: linear-gradient(90deg, $primary, $primary-light);
   transition: width 0.2s linear;
 }
@@ -446,7 +453,7 @@ onUnload(() => {
   display: flex;
   min-width: 88rpx;
   height: 64rpx;
-  border-radius: 999rpx;
+  border-radius: $radius-pill;
   background: $paper;
   border: 1rpx solid $border;
   align-items: center;
@@ -470,7 +477,7 @@ onUnload(() => {
   font-size: 22rpx;
   color: $warning;
   background: #fdf6e8;
-  border-radius: 999rpx;
+  border-radius: $radius-pill;
   padding: 10rpx 28rpx;
 }
 
@@ -480,17 +487,19 @@ onUnload(() => {
   flex-direction: row;
   margin-top: 24rpx;
   background: $card;
-  border-radius: 999rpx;
+  border-radius: $radius-pill;
   padding: 6rpx;
   border: 1rpx solid $border;
+  box-shadow: $shadow-xs;
 }
 .lang-item {
   display: flex;
   flex: 1;
   min-height: 72rpx;
-  border-radius: 999rpx;
+  border-radius: $radius-pill;
   align-items: center;
   justify-content: center;
+  transition: all 0.15s ease;
 }
 .lang-item text {
   font-size: 26rpx;
@@ -498,6 +507,7 @@ onUnload(() => {
 }
 .lang-item.active {
   background: linear-gradient(135deg, $primary, $primary-light);
+  box-shadow: 0 4rpx 12rpx rgba(176, 58, 46, 0.22);
 }
 .lang-item.active text {
   color: #fff;
@@ -508,6 +518,8 @@ onUnload(() => {
 .subtitle {
   margin-top: 24rpx;
   padding: 28rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .subtitle-title {
   display: block;
@@ -548,11 +560,13 @@ onUnload(() => {
   align-items: center;
   margin-bottom: 20rpx;
   min-height: 112rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .guide-entry-icon {
   width: 72rpx;
   height: 72rpx;
-  border-radius: 20rpx;
+  border-radius: 22rpx;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -567,7 +581,7 @@ onUnload(() => {
 }
 .menu-arrow {
   font-size: 40rpx;
-  color: $ink-light;
+  color: $ink-faint;
 }
 
 .bottom-gap {

@@ -130,13 +130,13 @@ onShow(loadLevels)
 .game {
   min-height: 100vh;
   background: $paper;
-  padding: 32rpx;
+  padding: 40rpx;
 }
 
 /* ---------- 积分卡 ---------- */
 .score-card {
   position: relative;
-  border-radius: $radius-lg;
+  border-radius: $radius-xl;
   overflow: hidden;
   padding: 40rpx 36rpx;
   margin-bottom: 32rpx;
@@ -149,6 +149,16 @@ onShow(loadLevels)
   right: 0;
   bottom: 0;
   background: linear-gradient(135deg, #b03a2e 0%, #8e2b21 100%);
+}
+.score-card-bg::after {
+  content: '';
+  position: absolute;
+  top: -80rpx;
+  right: -40rpx;
+  width: 280rpx;
+  height: 280rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
 }
 .score-card-body {
   display: flex;
@@ -181,7 +191,7 @@ onShow(loadLevels)
 .rank-badge {
   background: rgba(255, 255, 255, 0.18);
   border: 1rpx solid rgba(255, 255, 255, 0.4);
-  border-radius: 999rpx;
+  border-radius: $radius-pill;
   padding: 12rpx 28rpx;
 }
 .rank-badge-text {
@@ -207,17 +217,22 @@ onShow(loadLevels)
   align-items: center;
   margin-bottom: 24rpx;
   min-height: 128rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
+  transition: transform 0.1s ease;
+  &:active { transform: scale(0.99); }
 }
 .entry-icon {
   width: 88rpx;
   height: 88rpx;
-  border-radius: 24rpx;
+  border-radius: 26rpx;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 44rpx;
   margin-right: 24rpx;
   flex-shrink: 0;
+  box-shadow: $shadow-xs;
 }
 .entry-name {
   display: block;
@@ -233,13 +248,15 @@ onShow(loadLevels)
 }
 .entry-arrow {
   font-size: 44rpx;
-  color: $ink-light;
+  color: $ink-faint;
   margin-left: 16rpx;
 }
 
 /* ---------- 玩法说明 ---------- */
 .rules {
   padding: 32rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .rules-title {
   display: block;
@@ -247,12 +264,28 @@ onShow(loadLevels)
   font-weight: 700;
   color: $ink;
   margin-bottom: 20rpx;
+  position: relative;
+  padding-left: 20rpx;
+}
+.rules-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8rpx;
+  height: 28rpx;
+  border-radius: 4rpx;
+  background: linear-gradient(180deg, $primary, $primary-light);
 }
 .rule-item {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   margin-bottom: 16rpx;
+}
+.rule-item:last-child {
+  margin-bottom: 0;
 }
 .rule-index {
   width: 36rpx;

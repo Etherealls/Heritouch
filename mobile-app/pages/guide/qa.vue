@@ -228,12 +228,14 @@ onUnload(() => {
 .qa {
   min-height: 100vh;
   background: $paper;
-  padding: 32rpx;
+  padding: 40rpx;
 }
 
 /* ---------- 页面说明 ---------- */
 .qa-intro {
   padding: 28rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .qa-intro-title {
   display: block;
@@ -296,6 +298,8 @@ onUnload(() => {
   align-items: center;
   margin-top: 32rpx;
   padding: 12rpx 12rpx 12rpx 28rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .text-input {
   flex: 1;
@@ -305,7 +309,7 @@ onUnload(() => {
 }
 .input-placeholder {
   font-size: 26rpx;
-  color: #b5aa96;
+  color: $ink-faint;
 }
 .send-btn {
   display: flex;
@@ -327,6 +331,8 @@ onUnload(() => {
 .answer {
   margin-top: 32rpx;
   padding: 28rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .answer-question {
   background: $paper;
@@ -399,6 +405,8 @@ onUnload(() => {
 .recommend {
   margin-top: 32rpx;
   padding: 28rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .recommend-title {
   display: block;
@@ -415,7 +423,7 @@ onUnload(() => {
 .chip {
   display: inline-block;
   padding: 12rpx 28rpx;
-  border-radius: 999rpx;
+  border-radius: $radius-pill;
   background: $paper;
   border: 1rpx solid $border;
   font-size: 22rpx;
@@ -440,6 +448,8 @@ onUnload(() => {
 .history-item {
   padding: 24rpx 28rpx;
   margin-bottom: 16rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .history-question {
   display: block;

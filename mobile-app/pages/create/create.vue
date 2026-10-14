@@ -89,24 +89,26 @@ function goWorks() {
 .create {
   min-height: 100vh;
   background: $paper;
-  padding: 32rpx;
+  padding: 40rpx;
 }
 
 /* ---------- 页面说明 ---------- */
 .page-intro {
-  padding: 8rpx 0 32rpx;
+  padding: 8rpx 0 36rpx;
 }
 .page-intro-title {
   display: block;
-  font-size: 40rpx;
+  font-size: 44rpx;
   font-weight: 700;
   color: $ink;
+  letter-spacing: 1rpx;
 }
 .page-intro-sub {
   display: block;
   font-size: 24rpx;
   color: $ink-light;
   margin-top: 12rpx;
+  line-height: 1.6;
 }
 
 /* ---------- 功能大卡片 ---------- */
@@ -118,18 +120,23 @@ function goWorks() {
   flex-direction: row;
   align-items: center;
   margin-bottom: 24rpx;
-  padding: 32rpx 28rpx;
+  padding: 36rpx 32rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
+  transition: transform 0.1s ease;
+  &:active { transform: scale(0.99); }
 }
 .feature-icon {
   width: 104rpx;
   height: 104rpx;
-  border-radius: 28rpx;
+  border-radius: 30rpx;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 52rpx;
   margin-right: 24rpx;
   flex-shrink: 0;
+  box-shadow: $shadow-xs;
 }
 .feature-name {
   display: block;
@@ -141,12 +148,12 @@ function goWorks() {
   display: block;
   font-size: 22rpx;
   color: $ink-light;
-  margin-top: 8rpx;
-  line-height: 1.5;
+  margin-top: 10rpx;
+  line-height: 1.55;
 }
 .feature-arrow {
   font-size: 44rpx;
-  color: $ink-light;
+  color: $ink-faint;
   margin-left: 16rpx;
   flex-shrink: 0;
 }
@@ -157,6 +164,8 @@ function goWorks() {
   flex-direction: row;
   align-items: center;
   min-height: 112rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .my-works-icon {
   width: 64rpx;

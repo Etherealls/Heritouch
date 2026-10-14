@@ -274,11 +274,12 @@ onReachBottom(() => {
 /* ---------- 筛选区 ---------- */
 .filter-area {
   background: $card;
-  padding: 24rpx 32rpx 20rpx;
+  padding: 24rpx 40rpx 20rpx;
   border-bottom: 1rpx solid $border;
   position: sticky;
   top: 0;
   z-index: 10;
+  box-shadow: 0 4rpx 16rpx rgba(61, 53, 41, 0.04);
 }
 
 /* 搜索框 */
@@ -287,7 +288,7 @@ onReachBottom(() => {
   flex-direction: row;
   align-items: center;
   height: 80rpx;
-  border-radius: 999rpx;
+  border-radius: $radius-pill;
   background: $paper;
   padding: 0 28rpx;
   border: 1rpx solid $border;
@@ -295,6 +296,7 @@ onReachBottom(() => {
 .search-icon {
   font-size: 26rpx;
   margin-right: 12rpx;
+  color: $ink-light;
 }
 .search-input {
   flex: 1;
@@ -304,14 +306,14 @@ onReachBottom(() => {
 }
 .search-placeholder {
   font-size: 26rpx;
-  color: #b5aa96;
+  color: $ink-faint;
 }
 .search-clear {
   display: flex;
-  width: 40rpx;
-  height: 40rpx;
+  width: 44rpx;
+  height: 44rpx;
   border-radius: 50%;
-  background: #e5ddd0;
+  background: $border-light;
   align-items: center;
   justify-content: center;
 }
@@ -333,8 +335,8 @@ onReachBottom(() => {
 }
 .chip {
   display: inline-block;
-  padding: 10rpx 26rpx;
-  border-radius: 999rpx;
+  padding: 10rpx 28rpx;
+  border-radius: $radius-pill;
   background: $paper;
   border: 1rpx solid $border;
   font-size: 22rpx;
@@ -343,16 +345,18 @@ onReachBottom(() => {
   line-height: 40rpx;
   min-height: 60rpx;
   text-align: center;
+  transition: all 0.15s ease;
 }
 .chip.small {
   font-size: 22rpx;
-  padding: 8rpx 24rpx;
+  padding: 8rpx 26rpx;
 }
 .chip.active {
-  background: $primary;
-  border-color: $primary;
+  background: linear-gradient(135deg, $primary, $primary-light);
+  border-color: transparent;
   color: #fff;
   font-weight: 600;
+  box-shadow: 0 4rpx 12rpx rgba(176, 58, 46, 0.22);
 }
 
 /* 级别 chips */
@@ -364,7 +368,7 @@ onReachBottom(() => {
 
 /* ---------- 列表区 ---------- */
 .list-body {
-  padding: 24rpx 32rpx;
+  padding: 28rpx 40rpx;
 }
 
 /* 项目卡片 */
@@ -374,7 +378,11 @@ onReachBottom(() => {
   align-items: stretch;
   padding: 0;
   overflow: hidden;
-  margin-bottom: 24rpx;
+  margin-bottom: 28rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
+  transition: transform 0.1s ease;
+  &:active { transform: scale(0.99); }
 }
 .project-cover {
   width: 200rpx;
@@ -385,7 +393,7 @@ onReachBottom(() => {
   flex-shrink: 0;
 }
 .project-cover-text {
-  font-size: 48rpx;
+  font-size: 52rpx;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.92);
   letter-spacing: 4rpx;
@@ -398,11 +406,11 @@ onReachBottom(() => {
   font-size: 16rpx;
   color: #fff;
   background: rgba(0, 0, 0, 0.28);
-  border-radius: 999rpx;
-  padding: 2rpx 12rpx;
+  border-radius: $radius-pill;
+  padding: 4rpx 14rpx;
 }
 .project-info {
-  padding: 24rpx 24rpx 20rpx;
+  padding: 24rpx 24rpx 22rpx;
   min-height: 180rpx;
 }
 .project-name {
@@ -415,7 +423,7 @@ onReachBottom(() => {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-top: 10rpx;
+  margin-top: 12rpx;
 }
 .project-meta .tag {
   margin-bottom: 0;
@@ -430,7 +438,7 @@ onReachBottom(() => {
   font-size: 22rpx;
   color: $ink-light;
   line-height: 1.6;
-  margin-top: 12rpx;
+  margin-top: 14rpx;
 }
 
 /* 加载态卡片 */

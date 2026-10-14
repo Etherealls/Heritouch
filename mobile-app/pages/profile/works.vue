@@ -174,7 +174,7 @@ onShow(() => {
 .works {
   min-height: 100vh;
   background: $paper;
-  padding: 32rpx;
+  padding: 40rpx;
 }
 
 /* ---------- 筛选 chips ---------- */
@@ -186,7 +186,7 @@ onShow(() => {
 .chip {
   display: inline-block;
   padding: 12rpx 28rpx;
-  border-radius: 999rpx;
+  border-radius: $radius-pill;
   background: $card;
   border: 1rpx solid $border;
   font-size: 24rpx;
@@ -195,12 +195,15 @@ onShow(() => {
   line-height: 40rpx;
   min-height: 64rpx;
   text-align: center;
+  box-shadow: $shadow-xs;
+  transition: all 0.15s ease;
 }
 .chip.active {
-  background: $primary;
-  border-color: $primary;
+  background: linear-gradient(135deg, $primary, $primary-light);
+  border-color: transparent;
   color: #fff;
   font-weight: 600;
+  box-shadow: 0 4rpx 12rpx rgba(176, 58, 46, 0.22);
 }
 
 /* ---------- 加载态 ---------- */
@@ -221,6 +224,8 @@ onShow(() => {
   overflow: hidden;
   margin-bottom: 24rpx;
   position: relative;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .work-delete {
   display: flex;

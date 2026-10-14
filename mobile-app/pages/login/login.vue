@@ -143,7 +143,7 @@ onLoad(() => {
 .login {
   min-height: 100vh;
   background: $paper;
-  padding: 32rpx;
+  padding: 40rpx;
 }
 
 /* ---------- 品牌头 ---------- */
@@ -151,27 +151,27 @@ onLoad(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 64rpx 0 48rpx;
+  padding: 72rpx 0 56rpx;
 }
 .brand-logo {
-  width: 128rpx;
-  height: 128rpx;
-  border-radius: 28rpx;
+  width: 136rpx;
+  height: 136rpx;
+  border-radius: 32rpx;
   background: linear-gradient(135deg, $primary, $primary-light);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 68rpx;
+  font-size: 72rpx;
   font-weight: 700;
   color: #fff;
-  box-shadow: 0 12rpx 32rpx rgba(176, 58, 46, 0.3);
+  box-shadow: 0 16rpx 40rpx rgba(176, 58, 46, 0.3);
 }
 .brand-title {
   display: block;
   font-size: 42rpx;
   font-weight: 700;
   color: $ink;
-  margin-top: 24rpx;
+  margin-top: 28rpx;
   letter-spacing: 2rpx;
 }
 .brand-slogan {
@@ -185,26 +185,29 @@ onLoad(() => {
 /* ---------- 头像选择 ---------- */
 .avatar-area {
   display: flex;
+  flex-direction: column;
   align-items: center;
   margin-bottom: 40rpx;
 }
 .avatar-picker {
   display: flex;
-  width: 160rpx;
-  height: 160rpx;
+  flex-direction: column;
+  width: 168rpx;
+  height: 168rpx;
   border-radius: 50%;
   background: $card;
   border: 2rpx dashed #d8cdb8;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  box-shadow: $shadow-xs;
 }
 .avatar-img {
   width: 100%;
   height: 100%;
 }
 .avatar-placeholder {
-  font-size: 56rpx;
+  font-size: 60rpx;
   display: block;
   text-align: center;
 }
@@ -218,13 +221,15 @@ onLoad(() => {
 .avatar-note {
   display: block;
   font-size: 20rpx;
-  color: #b5aa96;
-  margin-top: 12rpx;
+  color: $ink-faint;
+  margin-top: 16rpx;
 }
 
 /* ---------- 表单 ---------- */
 .form {
-  padding: 32rpx;
+  padding: 40rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .form-label {
   display: block;
@@ -239,19 +244,19 @@ onLoad(() => {
   background: $paper;
   border: 1rpx solid $border;
   border-radius: $radius-md;
-  padding: 0 24rpx;
+  padding: 0 28rpx;
   font-size: 28rpx;
   color: $ink;
   box-sizing: border-box;
 }
 .input-placeholder {
   font-size: 28rpx;
-  color: #b5aa96;
+  color: $ink-faint;
 }
 
 /* 登录按钮 */
 .login-btn {
-  margin-top: 36rpx;
+  margin-top: 40rpx;
   min-height: 92rpx;
   line-height: 92rpx;
 }
@@ -262,6 +267,7 @@ onLoad(() => {
   background: $card;
   border: 2rpx solid $primary;
   color: $primary;
+  box-shadow: none;
 }
 .guest-btn::after {
   border: none;
@@ -276,12 +282,12 @@ onLoad(() => {
 /* ---------- 协议提示 ---------- */
 .agreement {
   display: flex;
-  align-items: center;
-  margin-top: 40rpx;
+  justify-content: center;
+  margin-top: 48rpx;
 }
 .agreement-text {
   font-size: 20rpx;
-  color: #b5aa96;
+  color: $ink-faint;
 }
 
 .bottom-gap {

@@ -237,12 +237,14 @@ async function onSaveWork() {
 .painting {
   min-height: 100vh;
   background: $paper;
-  padding: 32rpx;
+  padding: 40rpx;
 }
 
 /* ---------- 表单 ---------- */
 .form {
-  padding: 32rpx;
+  padding: 36rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .form-label {
   display: block;
@@ -279,6 +281,7 @@ async function onSaveWork() {
 }
 .segment-item.active {
   background: linear-gradient(135deg, $primary, $primary-light);
+  box-shadow: 0 4rpx 12rpx rgba(176, 58, 46, 0.22);
 }
 .segment-item.active text {
   color: #fff;
@@ -294,7 +297,7 @@ async function onSaveWork() {
 .chip {
   display: inline-block;
   padding: 12rpx 28rpx;
-  border-radius: 999rpx;
+  border-radius: $radius-pill;
   background: $paper;
   border: 1rpx solid $border;
   font-size: 24rpx;
@@ -303,12 +306,14 @@ async function onSaveWork() {
   line-height: 40rpx;
   min-height: 64rpx;
   text-align: center;
+  transition: all 0.15s ease;
 }
 .chip.active {
-  background: $primary;
-  border-color: $primary;
+  background: linear-gradient(135deg, $primary, $primary-light);
+  border-color: transparent;
   color: #fff;
   font-weight: 600;
+  box-shadow: 0 4rpx 12rpx rgba(176, 58, 46, 0.22);
 }
 
 /* 描述输入 */
@@ -326,7 +331,7 @@ async function onSaveWork() {
 }
 .prompt-placeholder {
   font-size: 26rpx;
-  color: #b5aa96;
+  color: $ink-faint;
 }
 .prompt-count {
   display: flex;
@@ -370,7 +375,7 @@ async function onSaveWork() {
 .upload-sub {
   display: block;
   font-size: 20rpx;
-  color: #b5aa96;
+  color: $ink-faint;
   text-align: center;
   margin-top: 6rpx;
 }
@@ -407,9 +412,12 @@ async function onSaveWork() {
 /* ---------- loading ---------- */
 .loading {
   display: flex;
+  flex-direction: column;
   margin-top: 24rpx;
   align-items: center;
   padding: 56rpx 32rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .loading-spinner {
   width: 64rpx;
@@ -439,7 +447,9 @@ async function onSaveWork() {
 /* ---------- 结果区 ---------- */
 .result {
   margin-top: 24rpx;
-  padding: 32rpx;
+  padding: 36rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .result-cover {
   height: 400rpx;
@@ -532,7 +542,7 @@ async function onSaveWork() {
 }
 .compliance-text {
   font-size: 20rpx;
-  color: #b5aa96;
+  color: $ink-faint;
   line-height: 1.6;
 }
 

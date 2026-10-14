@@ -120,7 +120,7 @@ onShow(() => {
 .favorites {
   min-height: 100vh;
   background: $paper;
-  padding: 32rpx;
+  padding: 40rpx;
 }
 
 /* ---------- 加载态 ---------- */
@@ -129,6 +129,7 @@ onShow(() => {
   padding: 120rpx 32rpx;
   align-items: center;
   margin-top: 40rpx;
+  border-radius: $radius-xl;
 }
 .loading-text {
   font-size: 26rpx;
@@ -143,6 +144,8 @@ onShow(() => {
   margin-bottom: 20rpx;
   padding: 20rpx 24rpx;
   min-height: 144rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .fav-cover {
   width: 104rpx;

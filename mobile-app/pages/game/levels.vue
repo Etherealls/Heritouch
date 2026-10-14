@@ -123,7 +123,7 @@ onLoad(async () => {
 .levels {
   min-height: 100vh;
   background: $paper;
-  padding: 32rpx;
+  padding: 40rpx;
 }
 
 /* ---------- 加载态 ---------- */
@@ -132,6 +132,7 @@ onLoad(async () => {
   padding: 120rpx 32rpx;
   align-items: center;
   margin-top: 100rpx;
+  border-radius: $radius-xl;
 }
 .loading-text {
   font-size: 26rpx;
@@ -140,7 +141,7 @@ onLoad(async () => {
 
 /* ---------- 段位分组 ---------- */
 .rank-group {
-  margin-bottom: 40rpx;
+  margin-bottom: 44rpx;
 }
 .group-header {
   display: flex;
@@ -152,6 +153,7 @@ onLoad(async () => {
   border-radius: 12rpx;
   padding: 6rpx 20rpx;
   margin-right: 16rpx;
+  box-shadow: $shadow-xs;
 }
 .group-badge text {
   font-size: 22rpx;
@@ -177,6 +179,10 @@ onLoad(async () => {
   margin-bottom: 20rpx;
   padding: 24rpx;
   min-height: 168rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
+  transition: transform 0.1s ease;
+  &:active { transform: scale(0.99); }
 }
 .level-card.locked {
   opacity: 0.75;
@@ -184,7 +190,7 @@ onLoad(async () => {
 .level-icon {
   width: 104rpx;
   height: 104rpx;
-  border-radius: 28rpx;
+  border-radius: 30rpx;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -207,7 +213,7 @@ onLoad(async () => {
 }
 .pass-badge {
   background: #eaf4ec;
-  border-radius: 999rpx;
+  border-radius: $radius-pill;
   padding: 4rpx 16rpx;
   margin-left: 12rpx;
 }
@@ -254,7 +260,7 @@ onLoad(async () => {
 }
 .level-arrow {
   font-size: 48rpx;
-  color: $ink-light;
+  color: $ink-faint;
   margin-left: 8rpx;
 }
 </style>

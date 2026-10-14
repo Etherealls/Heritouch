@@ -135,35 +135,41 @@ onLoad(() => {
 .filter-row {
   display: flex;
   flex-direction: row;
-  padding: 20rpx 32rpx;
+  padding: 24rpx 40rpx;
 }
 .filter-chip {
   display: inline-block;
-  padding: 12rpx 28rpx;
-  border-radius: 999rpx;
+  padding: 12rpx 30rpx;
+  border-radius: $radius-pill;
   background: $card;
   border: 1rpx solid $border;
   font-size: 24rpx;
   color: $ink-light;
   margin-right: 16rpx;
-  min-height: 56rpx;
-  line-height: 56rpx;
+  min-height: 60rpx;
+  line-height: 60rpx;
   text-align: center;
+  box-shadow: $shadow-xs;
+  transition: all 0.15s ease;
 }
 .filter-chip.active {
-  background: $primary;
-  border-color: $primary;
+  background: linear-gradient(135deg, $primary, $primary-light);
+  border-color: transparent;
   color: #fff;
   font-weight: 600;
+  box-shadow: 0 4rpx 12rpx rgba(176, 58, 46, 0.22);
 }
 
 /* ---------- 图谱容器 ---------- */
 .graph-wrap {
   flex: 1;
-  margin: 0 32rpx 24rpx;
+  margin: 0 40rpx 24rpx;
   padding: 0;
   overflow: hidden;
   position: relative;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
+  background: $card;
   /* 固定像素高度，避免 flex 链在 H5 上无法撑开导致 canvas 高度为 0 */
   height: 900rpx;
   min-height: 900rpx;
@@ -186,15 +192,17 @@ onLoad(() => {
 /* ---------- 底部提示 ---------- */
 .tips-bar {
   display: flex;
-  padding: 20rpx 32rpx 32rpx;
+  padding: 20rpx 40rpx 40rpx;
   align-items: center;
+  justify-content: center;
 }
 .tips-text {
   font-size: 22rpx;
   color: $ink-light;
   background: $card;
-  border-radius: 999rpx;
-  padding: 12rpx 32rpx;
+  border-radius: $radius-pill;
+  padding: 14rpx 36rpx;
   border: 1rpx solid $border;
+  box-shadow: $shadow-xs;
 }
 </style>

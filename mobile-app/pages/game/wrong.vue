@@ -121,7 +121,7 @@ onShow(() => {
 .wrong {
   min-height: 100vh;
   background: $paper;
-  padding: 32rpx;
+  padding: 40rpx;
 }
 
 /* ---------- 加载态 ---------- */
@@ -130,6 +130,7 @@ onShow(() => {
   padding: 120rpx 32rpx;
   align-items: center;
   margin-top: 100rpx;
+  border-radius: $radius-xl;
 }
 .loading-text {
   font-size: 26rpx;
@@ -140,6 +141,8 @@ onShow(() => {
 .wrong-card {
   padding: 24rpx 28rpx;
   margin-bottom: 20rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .wrong-header {
   display: flex;

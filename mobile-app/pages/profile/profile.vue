@@ -169,7 +169,7 @@ onShow(() => {})
 .profile {
   min-height: 100vh;
   background: $paper;
-  padding: 32rpx;
+  padding: 40rpx;
 }
 
 /* ---------- 未登录卡片 ---------- */
@@ -178,6 +178,8 @@ onShow(() => {})
   flex-direction: row;
   align-items: center;
   min-height: 160rpx;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .login-avatar {
   width: 104rpx;
@@ -204,13 +206,13 @@ onShow(() => {})
 }
 .login-arrow {
   font-size: 44rpx;
-  color: $ink-light;
+  color: $ink-faint;
 }
 
 /* ---------- 已登录用户卡 ---------- */
 .user-card {
   position: relative;
-  border-radius: $radius-lg;
+  border-radius: $radius-xl;
   overflow: hidden;
   padding: 44rpx 36rpx;
   box-shadow: 0 12rpx 32rpx rgba(176, 58, 46, 0.22);
@@ -222,6 +224,16 @@ onShow(() => {})
   right: 0;
   bottom: 0;
   background: linear-gradient(135deg, #b03a2e 0%, #8e2b21 100%);
+}
+.user-card-bg::after {
+  content: '';
+  position: absolute;
+  top: -80rpx;
+  right: -40rpx;
+  width: 260rpx;
+  height: 260rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
 }
 .user-card-body {
   display: flex;
@@ -255,7 +267,7 @@ onShow(() => {})
   align-items: baseline;
   margin-top: 12rpx;
   background: rgba(255, 255, 255, 0.16);
-  border-radius: 999rpx;
+  border-radius: $radius-pill;
   padding: 8rpx 24rpx;
   align-self: flex-start;
 }
@@ -274,16 +286,18 @@ onShow(() => {})
 .menu-list {
   margin-top: 32rpx;
   padding: 8rpx 0;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
 }
 .menu-item {
   display: flex;
   flex-direction: row;
   align-items: center;
   min-height: 112rpx;
-  padding: 0 28rpx;
+  padding: 0 32rpx;
 }
 .menu-item + .menu-item {
-  border-top: 1rpx solid $border;
+  border-top: 1rpx solid $border-light;
 }
 .menu-icon {
   width: 64rpx;
@@ -306,18 +320,18 @@ onShow(() => {})
 }
 .menu-arrow {
   font-size: 40rpx;
-  color: $ink-light;
+  color: $ink-faint;
 }
 
 /* ---------- 版本信息 ---------- */
 .version-tip {
   display: flex;
-  align-items: center;
-  margin-top: 48rpx;
+  justify-content: center;
+  margin-top: 56rpx;
 }
 .version-tip text {
   font-size: 20rpx;
-  color: #b5aa96;
+  color: $ink-faint;
 }
 
 .bottom-gap {
