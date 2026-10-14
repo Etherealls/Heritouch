@@ -48,7 +48,7 @@
       <text class="group-title">关于</text>
       <view class="about-logo">
         <view class="about-logo-badge">
-          <text>遗</text>
+          <image class="about-logo-img" src="/static/logo.png" mode="aspectFit" />
         </view>
         <text class="about-name">指尖非遗</text>
         <text class="about-version">版本 1.0.0</text>
@@ -341,14 +341,17 @@ onShow(() => {
   width: 112rpx;
   height: 112rpx;
   border-radius: 24rpx;
-  background: linear-gradient(135deg, $primary, $primary-light);
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 56rpx;
-  font-weight: 700;
-  color: #fff;
   box-shadow: 0 8rpx 24rpx rgba(176, 58, 46, 0.28);
+  overflow: hidden;
+}
+.about-logo-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 24rpx;
 }
 .about-name {
   display: block;
