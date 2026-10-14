@@ -36,7 +36,7 @@ class Settings(BaseSettings):
     # ---------- Neo4j 知识图谱 ----------
     NEO4J_URL: str = ""
     NEO4J_BOLT_URL: str = "bolt://localhost:7687"
-    # 支持 "user/password" 合并写法（docker-compose 的 NEO4J_AUTH）与拆分写法
+    # 支持 "user/password" 合并写法与拆分写法（NEO4J_USER/NEO4J_PASSWORD）
     NEO4J_AUTH: str = ""
     NEO4J_USER: str = "neo4j"
     NEO4J_PASSWORD: str = ""

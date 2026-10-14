@@ -106,7 +106,7 @@ Heritouch/
 │   ├── app/                     # main / core / models / schemas / api / services
 │   ├── scripts/seed_data.py     # 一键灌数脚本（python -m scripts.seed_data）
 │   ├── static/images/           # 占位图（封面/头像/作品/题目，SVG 矢量）
-│   ├── requirements.txt / Dockerfile / .env.example
+│   ├── requirements.txt / .env.example
 ├── database/                    # 数据库脚本
 │   ├── mysql/
 │   │   ├── schema.sql           # 建库建表脚本
@@ -130,7 +130,6 @@ Heritouch/
 │   ├── check_scss.js            # 静态检查：全部 SCSS 样式块编译校验
 │   ├── fix_uni_imports.js       # 修复工具：将误导入的 Vue API 拆分回 'vue'
 │   └── repair_imports.js        # 修复工具：恢复导入丢失的兜底脚本
-├── docker-compose.yml           # 一键编排：MySQL + Neo4j + API + ChromaDB
 ├── .gitignore
 └── README.md
 ```
@@ -142,38 +141,8 @@ Heritouch/
 | 方式 | 要求 |
 | --- | --- |
 | 完整开发 | Node.js 18+、HBuilderX 3.8+、Python 3.10+、MySQL 8.0、Neo4j 5.x |
-| Docker 演示 | Docker 20+ 与 Docker Compose v2（无需本地安装数据库） |
 
-### 6.2 方式一：Docker Compose 一键启动（推荐演示）
-
-```bash
-# 1. 克隆仓库后进入项目根目录
-cd Heritouch
-
-# 2. 一键启动 MySQL / Neo4j / API / ChromaDB
-docker compose up -d
-
-# 3. 查看容器状态
-docker compose ps
-
-# 4. 初始化知识图谱（可选，Neo4j 启动后执行一次）
-docker compose exec neo4j cypher-shell -u neo4j -p password \
-  -f /var/lib/neo4j/import/init.cypher
-```
-
-启动后访问地址：
-
-| 服务 | 地址 | 账号 |
-| --- | --- | --- |
-| API 根路径 | http://localhost:5757/api/v1 | — |
-| API 交互式文档 | http://localhost:5757/docs | — |
-| Neo4j 浏览器 | http://localhost:7474 | neo4j / password |
-| MySQL | localhost:3306 | root / heritouch |
-| ChromaDB | http://localhost:8001 | — |
-
-> 首次启动 MySQL 会自动执行 `database/mysql/schema.sql` 与 `seed.sql` 完成建库灌数；数据卷已持久化，重复启动不会重复初始化。
-
-### 6.3 方式二：手动部署（本地开发）
+### 6.2 本地部署（手动启动 MySQL / Neo4j 与后端）
 
 **后端：**
 
@@ -187,6 +156,17 @@ uvicorn app.main:app --reload        # 启动服务，默认 http://localhost:57
 # 真机/局域网调试时，需监听所有网卡（否则手机连不上）：
 uvicorn app.main:app --reload --host 0.0.0.0 --port 5757
 ```
+
+> 依赖的 MySQL 与 Neo4j 需自行安装并启动（推荐 Neo4j Desktop 管理图数据库），
+> 并在 `.env` 中配置 `DATABASE_URL`、`NEO4J_BOLT_URL`、`NEO4J_AUTH` 等连接信息。
+> 后端启动后访问地址：
+
+| 服务 | 地址 | 账号 |
+| --- | --- | --- |
+| API 根路径 | http://localhost:5757/api/v1 | — |
+| API 交互式文档 | http://localhost:5757/docs | — |
+| Neo4j 浏览器 | http://localhost:7474 | 见 Neo4j Desktop 配置 |
+| MySQL | localhost:3306 | 见 .env 配置 |
 
 **前端：**
 
@@ -203,7 +183,7 @@ npm install
 
 2. HBuilderX → 文件 → 导入目录，选择 `mobile-app/`（项目为 **uni-app Vue3 经典布局**：`manifest.json`、`pages.json`、`index.html` 均位于 `mobile-app/` 根目录，首次运行若提示"项目模板是否支持 vue3 / 缺少 index.html"，确认这三者在根目录即可）；
 3. HBuilderX → 运行 → 运行到浏览器（H5 调试）/ 运行到小程序模拟器 / 运行到手机或模拟器；
-4. 默认 `useMock=true`，无需后端即可体验；接入真实后端见第 8 节。
+4. 首次运行需先启动后端并配置服务器地址（见第 8 节），否则页面会提示「数据获取失败」。
 
 ## 7. 多端编译说明
 
@@ -216,13 +196,11 @@ npm install
 
 > 平台差异通过条件编译处理，例如：`// #ifdef MP-WEIXIN ... // #endif`。
 
-## 8. 演示模式说明（Mock 切换）
+## 8. 数据与服务器配置说明
 
-- **默认演示模式**：前端 `mobile-app/utils/config.js` 中 `useMock = true`，所有接口由本地 Mock 数据（`api/mock/data.js`）驱动，**无需后端即可完整体验**全部功能；
-- **数据规模**：Mock 数据源为**全国非遗真实名录**（中国非物质文化遗产网 ihchina.cn，4234 个项目 / 3959 位传承人 / 10 大门类），由 `scripts/build_all_data.py` 生成 `api/mock/national-data.js`；
-- **切换真实服务器**：进入「我的 → 设置 → 服务器配置」，填写后端地址（如 `http://localhost:5757/api/v1`）并关闭 Mock 开关即可；后端种子脚本 `server/scripts/seed_data.py` 会自动检测并灌入同一份全国数据；
+- **数据来源**：全部数据由后端提供，来源于**全国非遗真实名录**（中国非物质文化遗产网 ihchina.cn，4234 个项目 / 3959 位传承人 / 10 大门类），前端不再内置任何演示/Mock 数据，获取失败时页面会提示"数据获取失败"；
+- **服务器地址配置**：进入「我的 → 设置 → 服务器地址」，填写后端地址（如 `http://localhost:5757/api/v1`）并点击「测试连接」验证；后端种子脚本 `server/scripts/seed_data.py` 会自动建表并灌入全国数据；
 - **真机/局域网调试**：手机与电脑连接**同一 WiFi**，在「我的 → 设置 → 服务器地址」填写电脑的局域网 IP（如 `http://192.168.1.100:5757/api/v1`，用 `ipconfig` 查看电脑 IPv4 地址），点击「测试连接」验证可达即可；后端需以 `--host 0.0.0.0` 启动，且 Windows 防火墙需放行 5757 端口。换网络后只需在设置页更新 IP，**无需重新打包**；
-- **Mock 与真实接口契约一致**：Mock 层与 `docs/API.md` 中定义的请求/响应结构完全一致，切换时业务代码零改动。
 
 > **关于图谱性能**：全国数据量达 8000+ 实体节点，移动端力导向图无法一次性渲染全部。图谱页默认展示「类别 → 代表项目」概览，点击类别筛选后展示该类项目与传承人子图（单类限流约 120 个项目，避免卡顿）。
 
@@ -260,13 +238,13 @@ A：后端已通过 FastAPI `CORSMiddleware` 放开跨域；若自行修改，�
 A：微信开发者工具 → 详情 → 本地设置 → 勾选"不校验合法域名"仅供开发调试；真机预览需在小程序后台（开发 → 开发管理 → 开发设置 → 服务器域名）将后端域名加入 `request`、`uploadFile`、`downloadFile` 合法域名列表，且必须为 HTTPS。
 
 **Q3：Neo4j 连接失败，知识图谱页无数据？**
-A：平台已做**降级处理**——图谱接口异常时自动返回内置关系数据，页面正常渲染并提示"图谱服务降级"。排查：确认 Neo4j 已启动（`docker compose ps`）、Bolt 端口 7687 可访问、`NEO4J_BOLT_URL` 指向正确服务名。
+A：平台已做**降级处理**——图谱接口异常时自动返回内置关系数据，页面正常渲染并提示"图谱服务降级"。排查：确认 Neo4j（Neo4j Desktop 或本机服务）已启动、Bolt 端口 7687 可访问、`.env` 中 `NEO4J_BOLT_URL` 指向正确地址。
 
 **Q4：如何在没有后端的情况下体验全部功能？**
-A：保持 `useMock=true`（默认即此状态），所有数据来自 `mobile-app/api/mock/data.js`；接入真实后端时在设置页填写服务器地址并关闭 Mock 开关，详见第 8 节。
+A：本项目已移除内置演示数据，所有数据均需连接真实后端获取。请先启动后端并在「我的 → 设置 → 服务器地址」配置正确地址（详见第 8 节），否则页面会提示「数据获取失败」。
 
 **Q5：MySQL 初始化脚本没有执行？**
-A：`docker-entrypoint-initdb.d` 仅在数据卷为空（首次启动）时执行。如需重新灌数：`docker compose down -v` 删除卷后重新 `up -d`，或手动执行 `mysql -uroot -pheritouch heritouch < database/mysql/schema.sql && mysql -uroot -pheritouch heritouch < database/mysql/seed.sql`。
+A：项目未使用 Docker，MySQL 需手动安装并初始化。请确认 `.env` 中 `DATABASE_URL` 指向的 MySQL 已启动，然后手动执行建库灌数：`mysql -uroot -p < database/mysql/schema.sql && mysql -uroot -p < database/mysql/seed.sql`，或直接运行 `python -m scripts.seed_data` 自动建表并灌入全国数据。
 
 **Q6：克隆仓库后 tabBar 图标缺失 / 想看原始 Word 开发文档？**
 A：仓库中的二进制资源（tabBar 图标 PNG、应用 Logo、原始 docx）均由脚本生成，首次使用请执行：

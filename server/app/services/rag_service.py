@@ -72,16 +72,22 @@ class RagService:
         self.docs = docs
         if self.enabled and docs:
             try:
-                self.collection.upsert(
-                    ids=[doc["id"] for doc in docs],
-                    documents=[doc["text"] for doc in docs],
-                    metadatas=[doc.get("metadata", {}) for doc in docs],
-                )
+                self._upsert_chunks(docs)
                 logger.info("RAG 知识库已写入 ChromaDB：%d 篇文档", len(docs))
             except Exception as exc:  # noqa: BLE001 - 写入失败仅告警
                 logger.warning("写入 ChromaDB 失败，继续使用关键词匹配：%s", exc)
         logger.info("RAG 知识库就绪：%d 篇文档（向量检索：%s）", len(self.docs), self.enabled)
         return len(self.docs)
+
+    def _upsert_chunks(self, docs: list[dict[str, Any]], batch_size: int = 2000) -> None:
+        """分批写入 ChromaDB，规避单批 5461 条的上限。"""
+        for start in range(0, len(docs), batch_size):
+            chunk = docs[start : start + batch_size]
+            self.collection.upsert(
+                ids=[doc["id"] for doc in chunk],
+                documents=[doc["text"] for doc in chunk],
+                metadatas=[doc.get("metadata", {}) for doc in chunk],
+            )
 
     def _load_docs_from_db(self) -> list[dict[str, Any]]:
         """从 MySQL 加载非遗项目与传承人知识文档。"""
