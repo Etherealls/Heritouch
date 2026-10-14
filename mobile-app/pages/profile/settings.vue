@@ -144,6 +144,8 @@ onShow(() => {
   min-height: 100vh;
   background: $paper;
   padding: 40rpx;
+  padding-top: calc(40rpx + constant(safe-area-inset-top));
+  padding-top: calc(40rpx + env(safe-area-inset-top));
 }
 
 /* ---------- 设置分组 ---------- */
@@ -234,6 +236,7 @@ onShow(() => {
 /* ---------- 关于 ---------- */
 .about {
   display: flex;
+  flex-direction: column;
   align-items: center;
   padding: 44rpx 28rpx;
 }
@@ -274,6 +277,7 @@ onShow(() => {
   color: $ink-light;
   line-height: 1.7;
   text-align: center;
+  max-width: 480rpx;
 }
 .tech-row {
   display: flex;

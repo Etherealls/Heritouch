@@ -101,6 +101,8 @@ onLoad(async () => {
   min-height: 100vh;
   background: $paper;
   padding: 40rpx;
+  padding-top: calc(40rpx + constant(safe-area-inset-top));
+  padding-top: calc(40rpx + env(safe-area-inset-top));
 }
 
 /* ---------- 加载态 ---------- */

@@ -334,6 +334,8 @@ onLoad((query) => {
 /* ---------- 头部封面区 ---------- */
 .hero {
   padding: 64rpx 40rpx 56rpx;
+  padding-top: calc(64rpx + constant(safe-area-inset-top));
+  padding-top: calc(64rpx + env(safe-area-inset-top));
   position: relative;
   overflow: hidden;
 }
@@ -401,7 +403,9 @@ onLoad((query) => {
 .info-item {
   display: flex;
   flex: 1;
+  flex-direction: column;
   align-items: center;
+  min-width: 0;
 }
 .info-label {
   display: block;
@@ -507,10 +511,12 @@ onLoad((query) => {
 }
 .person-card {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 260rpx;
   margin-right: 20rpx;
   padding: 28rpx 20rpx;
-  align-items: center;
+  flex-shrink: 0;
 }
 .person-avatar {
   width: 112rpx;

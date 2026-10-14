@@ -220,6 +220,8 @@ onShow(loadData)
 }
 .status-bar {
   height: 60rpx;
+  height: calc(60rpx + constant(safe-area-inset-top));
+  height: calc(60rpx + env(safe-area-inset-top));
 }
 .brand-row {
   display: flex;

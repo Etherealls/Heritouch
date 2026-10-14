@@ -275,6 +275,8 @@ onReachBottom(() => {
 .filter-area {
   background: $card;
   padding: 24rpx 40rpx 20rpx;
+  padding-top: calc(24rpx + constant(safe-area-inset-top));
+  padding-top: calc(24rpx + env(safe-area-inset-top));
   border-bottom: 1rpx solid $border;
   position: sticky;
   top: 0;
@@ -334,22 +336,25 @@ onReachBottom(() => {
   padding-bottom: 4rpx;
 }
 .chip {
-  display: inline-block;
-  padding: 10rpx 28rpx;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 28rpx;
   border-radius: $radius-pill;
   background: $paper;
   border: 1rpx solid $border;
   font-size: 22rpx;
   color: $ink-light;
   margin-right: 16rpx;
-  line-height: 40rpx;
-  min-height: 60rpx;
-  text-align: center;
+  height: 60rpx;
+  white-space: nowrap;
+  flex-shrink: 0;
   transition: all 0.15s ease;
 }
 .chip.small {
   font-size: 22rpx;
-  padding: 8rpx 26rpx;
+  padding: 0 26rpx;
+  height: 56rpx;
 }
 .chip.active {
   background: linear-gradient(135deg, $primary, $primary-light);

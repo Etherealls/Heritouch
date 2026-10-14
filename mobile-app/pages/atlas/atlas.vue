@@ -124,6 +124,8 @@ onLoad(() => {
   background: $paper;
   display: flex;
   flex-direction: column;
+  padding-top: constant(safe-area-inset-top);
+  padding-top: env(safe-area-inset-top);
 }
 
 /* ---------- 筛选 chips ---------- */
@@ -138,17 +140,19 @@ onLoad(() => {
   padding: 24rpx 40rpx;
 }
 .filter-chip {
-  display: inline-block;
-  padding: 12rpx 30rpx;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 30rpx;
   border-radius: $radius-pill;
   background: $card;
   border: 1rpx solid $border;
   font-size: 24rpx;
   color: $ink-light;
   margin-right: 16rpx;
-  min-height: 60rpx;
-  line-height: 60rpx;
-  text-align: center;
+  height: 60rpx;
+  white-space: nowrap;
+  flex-shrink: 0;
   box-shadow: $shadow-xs;
   transition: all 0.15s ease;
 }
