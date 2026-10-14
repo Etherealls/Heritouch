@@ -2,7 +2,7 @@
   <view class="force-graph">
     <canvas
       class="fg-canvas"
-      type="2d"
+      :type="canvasType"
       :canvas-id="canvasId"
       :id="canvasId"
       :disable-scroll="true"
@@ -56,6 +56,12 @@ const emit = defineEmits(['node-click'])
 const canvasId = 'fg_' + Math.random().toString(36).slice(2, 8)
 const activeNode = ref(null)
 const neighbors = ref([])
+
+// H5 走旧版 createCanvasContext；小程序/App 走新版 type="2d"
+let canvasType = ''
+// #ifndef H5
+canvasType = '2d'
+// #endif
 
 const NODE_COLORS = {
   heritage: '#b03a2e',
@@ -233,6 +239,10 @@ function draw() {
     }
   }
   c.restore()
+  // H5 端 createCanvasContext 是命令缓存式，需显式 draw() 提交到画布
+  // #ifdef H5
+  if (typeof c.draw === 'function') c.draw()
+  // #endif
 }
 
 /* ---------- 触控交互：单指拖拽 / 双指缩放 / 点击 ---------- */
@@ -339,31 +349,36 @@ function resetView() {
 async function measure() {
   await nextTick()
   const query = uni.createSelectorQuery()
-  // 必须同时请求 node 字段，否则 H5/APP 端拿不到 canvas 元素导致画布空白
+  // 必须同时请求 node 字段，否则小程序/APP 端拿不到 canvas 元素导致画布空白
   query.select('.fg-canvas').fields({ node: true, size: true }).exec((res) => {
-    if (!res || !res[0]) return
-    canvasW.value = res[0].width
-    canvasH.value = res[0].height
-    const node = res[0].node
+    let w = (res && res[0] && res[0].width) || 0
+    let h = (res && res[0] && res[0].height) || 0
+    // 尺寸兜底：部分端 canvas 拿不到 size，用窗口尺寸估算
+    if (!w || !h) {
+      const sys = uni.getSystemInfoSync()
+      const winW = sys.windowWidth || 375
+      w = w || winW
+      h = h || 420
+    }
+    canvasW.value = w
+    canvasH.value = h
+    const node = res && res[0] && res[0].node
+    // #ifdef MP-WEIXIN || APP-PLUS
     if (node && node.getContext) {
-      // 新版 type="2d" canvas：标准 HTML5 API，需按 DPR 放大物理像素保证清晰
       const c2d = node.getContext('2d')
-      const dpr = (uni.getSystemInfoSync && uni.getSystemInfoSync().pixelRatio) || 2
-      if (node.width !== Math.round(res[0].width * dpr)) {
-        node.width = Math.round(res[0].width * dpr)
-        node.height = Math.round(res[0].height * dpr)
-        c2d.scale(dpr, dpr)
-      }
+      const dpr = (uni.getSystemInfoSync().pixelRatio) || 2
+      node.width = Math.round(w * dpr)
+      node.height = Math.round(h * dpr)
+      c2d.setTransform(dpr, 0, 0, dpr, 0, 0)
       ctx.value = c2d
     } else {
-      // 兜底：旧版 canvas 接口（微信小程序 / 低版本 runtime）
-      // #ifdef MP-WEIXIN || APP-PLUS
       ctx.value = uni.createCanvasContext(canvasId)
-      // #endif
-      // #ifdef H5
-      ctx.value = uni.createCanvasContext(canvasId)
-      // #endif
     }
+    // #endif
+    // #ifdef H5
+    // H5 端 uni-app 的 canvas 编译为原生 canvas，用 createCanvasContext 获取上下文
+    ctx.value = uni.createCanvasContext(canvasId)
+    // #endif
     initSim()
     // 预热若干帧让布局快速收敛
     for (let i = 0; i < 60; i++) simulateStep()
@@ -427,8 +442,12 @@ onMounted(() => {
   position: relative;
   width: 100%;
   height: 100%;
+  min-height: 600rpx;
 }
 .fg-canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 100%;
   height: 100%;
 }
