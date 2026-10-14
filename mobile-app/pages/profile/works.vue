@@ -179,6 +179,7 @@ onShow(() => {
 
 /* ---------- 筛选 chips ---------- */
 .filter-row {
+  display: flex;
   flex-direction: row;
   margin-bottom: 24rpx;
 }
@@ -204,6 +205,7 @@ onShow(() => {
 
 /* ---------- 加载态 ---------- */
 .loading-card {
+  display: flex;
   padding: 120rpx 32rpx;
   align-items: center;
   margin-top: 40rpx;
@@ -221,6 +223,7 @@ onShow(() => {
   position: relative;
 }
 .work-delete {
+  display: flex;
   position: absolute;
   top: 16rpx;
   right: 16rpx;
@@ -273,6 +276,7 @@ onShow(() => {
   color: $ink;
 }
 .work-meta {
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin-top: 10rpx;
@@ -296,6 +300,7 @@ onShow(() => {
   padding: 28rpx 24rpx 24rpx;
 }
 .work-script-header {
+  display: flex;
   flex-direction: row;
   align-items: center;
 }

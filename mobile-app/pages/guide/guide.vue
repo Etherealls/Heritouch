@@ -339,6 +339,7 @@ onUnload(() => {
 
 /* ---------- 加载态 ---------- */
 .loading-card {
+  display: flex;
   padding: 120rpx 32rpx;
   align-items: center;
   margin-top: 100rpx;
@@ -350,6 +351,7 @@ onUnload(() => {
 
 /* ---------- 项目头部 ---------- */
 .project-header {
+  display: flex;
   flex-direction: row;
   align-items: center;
   padding: 24rpx;
@@ -383,6 +385,7 @@ onUnload(() => {
 
 /* ---------- 播放器 ---------- */
 .player {
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin-top: 24rpx;
@@ -412,6 +415,7 @@ onUnload(() => {
   min-width: 0;
 }
 .player-info {
+  display: flex;
   flex-direction: row;
   align-items: baseline;
   margin-bottom: 12rpx;
@@ -439,6 +443,7 @@ onUnload(() => {
   transition: width 0.2s linear;
 }
 .rate-btn {
+  display: flex;
   min-width: 88rpx;
   height: 64rpx;
   border-radius: 999rpx;
@@ -457,6 +462,7 @@ onUnload(() => {
 
 /* ---------- 自动播放提示 ---------- */
 .autoplay-tip {
+  display: flex;
   margin-top: 16rpx;
   align-items: center;
 }
@@ -470,6 +476,7 @@ onUnload(() => {
 
 /* ---------- 语言切换 ---------- */
 .lang-switch {
+  display: flex;
   flex-direction: row;
   margin-top: 24rpx;
   background: $card;
@@ -478,6 +485,7 @@ onUnload(() => {
   border: 1rpx solid $border;
 }
 .lang-item {
+  display: flex;
   flex: 1;
   min-height: 72rpx;
   border-radius: 999rpx;
@@ -535,6 +543,7 @@ onUnload(() => {
   margin-top: 24rpx;
 }
 .guide-entry {
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin-bottom: 20rpx;

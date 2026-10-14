@@ -128,6 +128,7 @@ onLoad(async () => {
 
 /* ---------- 加载态 ---------- */
 .loading-card {
+  display: flex;
   padding: 120rpx 32rpx;
   align-items: center;
   margin-top: 100rpx;
@@ -142,6 +143,7 @@ onLoad(async () => {
   margin-bottom: 40rpx;
 }
 .group-header {
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin-bottom: 24rpx;
@@ -169,6 +171,7 @@ onLoad(async () => {
 
 /* ---------- 关卡卡 ---------- */
 .level-card {
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin-bottom: 20rpx;
@@ -193,6 +196,7 @@ onLoad(async () => {
   min-width: 0;
 }
 .level-name-row {
+  display: flex;
   flex-direction: row;
   align-items: center;
 }
@@ -219,6 +223,7 @@ onLoad(async () => {
   margin-top: 6rpx;
 }
 .level-meta {
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin-top: 10rpx;

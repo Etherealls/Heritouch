@@ -358,6 +358,7 @@ onLoad((query) => {
   max-width: 560rpx;
 }
 .hero-tags {
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin-top: 16rpx;
@@ -377,12 +378,14 @@ onLoad((query) => {
 
 /* ---------- 信息行 ---------- */
 .info-bar {
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin: 24rpx 32rpx 0;
   padding: 24rpx 0;
 }
 .info-item {
+  display: flex;
   flex: 1;
   align-items: center;
 }
@@ -434,6 +437,7 @@ onLoad((query) => {
   margin-bottom: 0;
 }
 .section-header {
+  display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -447,6 +451,7 @@ onLoad((query) => {
 
 /* 工艺流程步骤 */
 .craft-step {
+  display: flex;
   flex-direction: row;
   align-items: flex-start;
   margin-bottom: 16rpx;
@@ -481,10 +486,12 @@ onLoad((query) => {
   width: 100%;
 }
 .people-row {
+  display: flex;
   flex-direction: row;
   padding-bottom: 8rpx;
 }
 .person-card {
+  display: flex;
   width: 260rpx;
   margin-right: 20rpx;
   padding: 28rpx 20rpx;
@@ -528,6 +535,7 @@ onLoad((query) => {
 
 /* ---------- 标签组 ---------- */
 .tag-group {
+  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
@@ -544,6 +552,7 @@ onLoad((query) => {
   width: 100%;
 }
 .rec-row {
+  display: flex;
   flex-direction: row;
   padding-bottom: 8rpx;
 }
@@ -598,6 +607,7 @@ onLoad((query) => {
 
 /* ---------- 底部操作栏 ---------- */
 .action-bar {
+  display: flex;
   position: fixed;
   left: 0;
   right: 0;
@@ -610,6 +620,7 @@ onLoad((query) => {
   box-shadow: 0 -4rpx 24rpx rgba(61, 53, 41, 0.06);
 }
 .action-btn {
+  display: flex;
   flex: 1;
   align-items: center;
   justify-content: center;

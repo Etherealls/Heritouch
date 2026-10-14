@@ -229,6 +229,7 @@ onUnload(() => {
 
 /* ---------- 加载态 ---------- */
 .loading-card {
+  display: flex;
   padding: 120rpx 32rpx;
   align-items: center;
   margin-top: 100rpx;
@@ -253,6 +254,7 @@ onUnload(() => {
   padding: 24rpx 28rpx;
 }
 .progress-info {
+  display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -287,6 +289,7 @@ onUnload(() => {
   padding: 28rpx;
 }
 .question-type-row {
+  display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -330,6 +333,7 @@ onUnload(() => {
   line-height: 1.7;
 }
 .question-image {
+  display: flex;
   height: 320rpx;
   border-radius: $radius-md;
   margin-top: 20rpx;
@@ -354,6 +358,7 @@ onUnload(() => {
   margin-top: 24rpx;
 }
 .option-row {
+  display: flex;
   flex-direction: row;
   align-items: center;
   background: $card;
@@ -365,6 +370,7 @@ onUnload(() => {
   box-shadow: $shadow-card;
 }
 .option-letter {
+  display: flex;
   width: 56rpx;
   height: 56rpx;
   border-radius: 50%;
@@ -420,9 +426,11 @@ onUnload(() => {
 
 /* 判断题两个大按钮 */
 .judge-row {
+  display: flex;
   flex-direction: row;
 }
 .judge-btn {
+  display: flex;
   flex: 1;
   flex-direction: column;
   align-items: center;

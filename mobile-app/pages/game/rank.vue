@@ -105,6 +105,7 @@ onLoad(async () => {
 
 /* ---------- 加载态 ---------- */
 .loading-card {
+  display: flex;
   padding: 120rpx 32rpx;
   align-items: center;
   margin-top: 100rpx;
@@ -119,6 +120,7 @@ onLoad(async () => {
   padding: 8rpx 0;
 }
 .rank-item {
+  display: flex;
   flex-direction: row;
   align-items: center;
   padding: 24rpx 28rpx;
@@ -136,6 +138,7 @@ onLoad(async () => {
 }
 /* 排名 */
 .rank-num {
+  display: flex;
   width: 64rpx;
   align-items: center;
   justify-content: center;

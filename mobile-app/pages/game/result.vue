@@ -162,6 +162,7 @@ onLoad(async (query) => {
   background: linear-gradient(160deg, #b03a2e 0%, #8e2b21 100%);
 }
 .score-hero-body {
+  display: flex;
   position: relative;
   align-items: center;
 }
@@ -172,6 +173,7 @@ onLoad(async (query) => {
   color: rgba(255, 255, 255, 0.9);
 }
 .score-circle {
+  display: flex;
   flex-direction: row;
   align-items: baseline;
   margin-top: 24rpx;
@@ -195,6 +197,7 @@ onLoad(async (query) => {
   margin-top: 12rpx;
 }
 .result-stats {
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin-top: 36rpx;
@@ -203,6 +206,7 @@ onLoad(async (query) => {
   padding: 24rpx 0;
 }
 .stat-item {
+  display: flex;
   flex: 1;
   align-items: center;
 }
@@ -228,6 +232,7 @@ onLoad(async (query) => {
 
 /* ---------- 解锁提示 ---------- */
 .unlock-tip {
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin-top: 32rpx;
@@ -262,6 +267,7 @@ onLoad(async (query) => {
   margin-top: 40rpx;
 }
 .action-btn {
+  display: flex;
   min-height: 92rpx;
   border-radius: 999rpx;
   align-items: center;
@@ -278,6 +284,7 @@ onLoad(async (query) => {
   color: #fff;
 }
 .action-row {
+  display: flex;
   flex-direction: row;
   margin-top: 20rpx;
 }

@@ -126,6 +126,7 @@ onShow(() => {
 
 /* ---------- 加载态 ---------- */
 .loading-card {
+  display: flex;
   padding: 120rpx 32rpx;
   align-items: center;
   margin-top: 100rpx;
@@ -141,6 +142,7 @@ onShow(() => {
   margin-bottom: 20rpx;
 }
 .wrong-header {
+  display: flex;
   flex-direction: row;
   align-items: center;
 }
@@ -211,6 +213,7 @@ onShow(() => {
   padding: 20rpx 24rpx;
 }
 .analysis-row {
+  display: flex;
   flex-direction: row;
   align-items: flex-start;
   margin-bottom: 12rpx;

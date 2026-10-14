@@ -125,6 +125,7 @@ onShow(() => {
 
 /* ---------- 加载态 ---------- */
 .loading-card {
+  display: flex;
   padding: 120rpx 32rpx;
   align-items: center;
   margin-top: 40rpx;
@@ -136,6 +137,7 @@ onShow(() => {
 
 /* ---------- 收藏卡 ---------- */
 .fav-card {
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin-bottom: 20rpx;
@@ -166,6 +168,7 @@ onShow(() => {
   color: $ink;
 }
 .fav-meta {
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin-top: 10rpx;
@@ -179,6 +182,7 @@ onShow(() => {
   color: $ink-light;
 }
 .fav-cancel {
+  display: flex;
   width: 72rpx;
   height: 72rpx;
   border-radius: 50%;
