@@ -1,11 +1,10 @@
-"""数据库种子脚本：扬州非遗演示数据。
+"""数据库种子脚本：非遗数据（优先全国真实数据，缺省回退扬州演示）。
 
 数据说明：
-- 14 个非遗项目、16 位传承人、5 个关卡、50 道题目，与前端 Mock 数据
-  （mobile-app/api/mock/data.js）及 database/mysql/seed.sql 一致；
-- 项目/传承人/关卡/题目均显式指定主键 ID，保证与知识图谱演示数据
-  （graph_service）及前端节点 ID（h1 / i101 / c1...）对齐；
-- 另含 6 个演示用户（1 个管理员 + 5 个排行榜用户），便于演示积分排行榜。
+- 项目/传承人优先从 data/seed_national.json 加载全国数据（中国非遗网
+  ihchina.cn 公开名录，约 4234 个项目 / 3959 位传承人）；
+- 无全国数据文件时回退到内置扬州演示数据（14 项目 / 16 传承人）；
+- 关卡/题目/演示用户固定为内置内容。
 
 使用方式：
 - 启动 main.py 时若数据库为空自动调用（try 包裹，失败仅告警不阻断）；
@@ -14,6 +13,7 @@
 from __future__ import annotations
 
 import logging
+import os
 
 from app.core.database import Base, SessionLocal, engine
 from app.models.game import GameLevel, GameQuestion
@@ -556,6 +556,36 @@ DEMO_USERS: list[dict] = [
 ]
 
 
+# 全国数据文件（由 scripts/build_seed_national.py 生成，4234 项目 + 3959 传承人）
+NATIONAL_DATA_FILE = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+    "data",
+    "seed_national.json",
+)
+
+
+def _load_national_data() -> "tuple[list[dict], list[dict]] | None":
+    """加载全国非遗数据（项目 + 传承人）。
+
+    存在 data/seed_national.json 时返回 (projects, inheritors)，
+    否则返回 None 表示回退到内置扬州演示数据。
+    """
+    if not os.path.exists(NATIONAL_DATA_FILE):
+        logger.info("未找到全国数据文件，使用内置扬州演示数据")
+        return None
+    import json
+
+    with open(NATIONAL_DATA_FILE, encoding="utf-8") as f:
+        data = json.load(f)
+    projects = data.get("projects", [])
+    inheritors = data.get("inheritors", [])
+    if not projects:
+        logger.warning("全国数据文件为空，使用内置扬州演示数据")
+        return None
+    logger.info("加载全国数据：%d 个项目 / %d 位传承人", len(projects), len(inheritors))
+    return projects, inheritors
+
+
 def seed_if_empty() -> bool:
     """数据库为空时写入种子数据；已有数据则跳过。
 
@@ -579,19 +609,55 @@ def seed_if_empty() -> bool:
 
 
 def _seed() -> None:
-    """写入全部种子数据（项目 → 传承人 → 关卡 → 题目 → 演示用户）。"""
+    """写入全部种子数据（项目 → 传承人 → 关卡 → 题目 → 演示用户）。
+
+    项目/传承人优先使用全国数据（data/seed_national.json），
+    缺失时回退到内置扬州演示数据；关卡/题目/演示用户固定为内置内容。
+    """
     session = SessionLocal()
     try:
+        national = _load_national_data()
+
         # 1. 非遗项目
-        for data in PROJECTS:
-            session.add(HeritageProject(**data))
-        session.flush()
-        # 2. 传承人（按项目名解析外键）
-        project_ids = {project.name: project.id for project in session.query(HeritageProject).all()}
-        for data in INHERITORS:
-            payload = {key: value for key, value in data.items() if key != "project_name"}
-            payload["project_id"] = project_ids[data["project_name"]]
-            session.add(Inheritor(**payload))
+        if national:
+            projects, inheritors = national
+            for data in projects:
+                # 全国数据字段：id/name/level/category/region/batch/intro
+                session.add(
+                    HeritageProject(
+                        id=data["id"],
+                        name=data["name"],
+                        level=data["level"],
+                        category=data["category"],
+                        region=data["region"],
+                        batch=data.get("batch"),
+                        intro=data.get("intro") or None,
+                    )
+                )
+            session.flush()
+            # 2. 传承人（全国数据已含 project_id 外键）
+            for data in inheritors:
+                session.add(
+                    Inheritor(
+                        name=data["name"],
+                        gender=data.get("gender") or None,
+                        project_id=data["project_id"],
+                        title=data.get("title"),
+                        biography=data.get("biography") or None,
+                    )
+                )
+            n_projects, n_inheritors = len(projects), len(inheritors)
+        else:
+            for data in PROJECTS:
+                session.add(HeritageProject(**data))
+            session.flush()
+            project_ids = {project.name: project.id for project in session.query(HeritageProject).all()}
+            for data in INHERITORS:
+                payload = {key: value for key, value in data.items() if key != "project_name"}
+                payload["project_id"] = project_ids[data["project_name"]]
+                session.add(Inheritor(**payload))
+            n_projects, n_inheritors = len(PROJECTS), len(INHERITORS)
+
         # 3. 关卡
         for data in LEVELS:
             session.add(GameLevel(**data))
@@ -604,8 +670,8 @@ def _seed() -> None:
         session.commit()
         logger.info(
             "种子数据写入完成：%d 个项目 / %d 位传承人 / %d 个关卡 / %d 道题目 / %d 个演示用户",
-            len(PROJECTS),
-            len(INHERITORS),
+            n_projects,
+            n_inheritors,
             len(LEVELS),
             len(QUESTIONS),
             len(DEMO_USERS),

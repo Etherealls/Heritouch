@@ -47,20 +47,8 @@ export async function getKnowledgeGraph(params = {}) {
   const { category = '', region = '', depth = 2 } = params
   if (config.useMock) {
     await mockDelay(500)
-    let nodes = mock.graphData.nodes.slice()
-    let edges = mock.graphData.edges.slice()
-    if (category) {
-      const keep = new Set()
-      edges = edges.filter((e) => {
-        if (e.label === '归属' && nodes.find((n) => n.id === e.source && n.name === category)) {
-          keep.add(e.source); keep.add(e.target); return true
-        }
-        return keep.has(e.source) || keep.has(e.target)
-      })
-      const ids = new Set(edges.flatMap((e) => [e.source, e.target]))
-      nodes = nodes.filter((n) => ids.has(n.id))
-    }
-    return { nodes, edges }
+    // 动态构建图谱子图：无类别返回概览，指定类别返回该类项目+传承人
+    return mock.buildGraph(category, region)
   }
   return http.get('/knowledge-graph', { category, region, depth })
 }
@@ -83,10 +71,11 @@ export async function getRecommendations(id) {
     await mockDelay(200)
     const project = mock.projects.find((p) => p.id === Number(id))
     if (!project) return { similar: [], sameRegion: [], sameCategory: [] }
-    const similar = mock.projects.filter((p) => p.id !== project.id && p.materials.some((m) => project.materials.includes(m))).slice(0, 4)
+    // 全国数据无 materials 富字段，similar 退化为同类推荐；region 取省级前缀匹配
+    const regionKey = (project.region || '').slice(0, 3)
     const sameCategory = mock.projects.filter((p) => p.id !== project.id && p.category === project.category).slice(0, 4)
-    const sameRegion = mock.projects.filter((p) => p.id !== project.id && p.region === project.region).slice(0, 4)
-    return { similar, sameCategory, sameRegion }
+    const sameRegion = mock.projects.filter((p) => p.id !== project.id && (p.region || '').startsWith(regionKey)).slice(0, 4)
+    return { similar: [], sameCategory, sameRegion }
   }
   return http.get('/heritage/' + id + '/recommendations')
 }

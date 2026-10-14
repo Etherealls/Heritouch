@@ -1,10 +1,9 @@
 """Neo4j 知识图谱服务。
 
 降级策略：
-- 未配置 Neo4j 或连接失败时，使用内置内存演示数据构建同构图谱
-  （14 个项目 / 16 位传承人 / 7 类别 / 3 朝代 / 3 材料 / 3 民俗，
-  节点 id 与前端力导图约定一致：h1 / i101 / c1 / d1 / m1 / f1）；
-- Neo4j 可用但库中无 Heritage 节点时，同样回退内存演示数据；
+- 未配置 Neo4j 或连接失败时，从 MySQL 业务数据构建同构图谱
+  （全国非遗数据，数据库为空时回退内置演示数据）；
+- Neo4j 可用但库中无 Heritage 节点时，同样回退内存图谱；
 - sync_from_mysql 从 MySQL 业务数据构建图谱（MERGE 语义，可重复执行）。
 """
 from __future__ import annotations
@@ -375,7 +374,7 @@ class GraphService:
             node_id = f"w_{name}"
         return {"id": node_id, "name": name, "type": node_type, "refId": ref_id}
 
-    # ---------- 内存演示图谱 ----------
+    # ---------- 内存降级图谱 ----------
     def _build_memory_graph(
         self,
         category: Optional[str] = None,
@@ -383,7 +382,14 @@ class GraphService:
         depth: int = 2,
         project_ids: Optional[list[int]] = None,
     ) -> dict[str, Any]:
-        """用内置演示数据构建同构图谱（Neo4j 不可用时的降级数据）。"""
+        """从 MySQL 业务数据构建图谱（Neo4j 不可用时的降级数据源）。
+
+        优先读取数据库中的全国非遗数据；数据库为空时回退到内置演示数据。
+        全国数据量大，前端全量渲染会卡死，故此处也按 category/region 过滤，
+        且无过滤时限制返回数量（避免单次返回数千节点）。
+        """
+        projects, inheritors = self._load_memory_projects()
+
         nodes: dict[str, dict[str, Any]] = {}
         edges: list[dict[str, str]] = []
         seen_edges: set[tuple[str, str, str]] = set()
@@ -398,56 +404,86 @@ class GraphService:
                 seen_edges.add(key)
                 edges.append({"source": source, "target": target, "label": label})
 
-        def category_node_id(category_name: str) -> str:
-            if category_name in CATEGORY_ORDER:
-                return f"c{CATEGORY_ORDER.index(category_name) + 1}"
-            return f"c_{category_name}"
-
         # 项目过滤
-        projects = DEMO_PROJECTS
         if project_ids is not None:
             projects = [p for p in projects if p["id"] in project_ids]
         if category:
             projects = [p for p in projects if p["category"] == category]
         if region:
-            projects = [p for p in projects if region in p["region"]]
+            projects = [p for p in projects if region in (p["region"] or "")]
+
+        # 无过滤时限制数量：每类别取代表项目，避免全量返回导致前端卡死
+        if not category and not region and project_ids is None:
+            per_cat: dict[str, list[dict]] = {}
+            for p in projects:
+                per_cat.setdefault(p["category"], []).append(p)
+            projects = []
+            for items in per_cat.values():
+                projects.extend(items[:5])
+        # 指定类别/项目时也限流，避免单类别数百项目节点渲染卡顿
+        elif len(projects) > 120:
+            projects = projects[:120]
 
         # 类别节点（仅保留被选中项目涉及的类别）
         for category_name in sorted({p["category"] for p in projects}):
-            add_node(category_node_id(category_name), category_name, "category")
+            add_node("c_" + category_name, category_name, "category")
 
         for project in projects:
             pid = project["id"]
             heritage_id = f"h{pid}"
             add_node(heritage_id, project["name"], "heritage", ref_id=pid)
-            add_edge(heritage_id, category_node_id(project["category"]), RELATION_LABELS["BELONGS_TO_CATEGORY"])
+            add_edge(heritage_id, "c_" + project["category"], RELATION_LABELS["BELONGS_TO_CATEGORY"])
 
-            # 传承人 → 项目
-            for person in DEMO_INHERITORS:
+            # 传承人 → 项目（每项目最多 5 位，控制节点规模）
+            person_count = 0
+            for person in inheritors:
                 if person["project_id"] == pid:
+                    if person_count >= 5:
+                        break
                     inheritor_id = f"i{person['id']}"
                     add_node(inheritor_id, person["name"], "inheritor", ref_id=person["id"])
                     add_edge(inheritor_id, heritage_id, RELATION_LABELS["INHERITS"])
-
-            # 深度 >= 2 时补充朝代 / 材料 / 民俗两跳邻居
-            if depth >= 2:
-                for idx, dynasty in enumerate(DYNASTY_ORDER):
-                    if dynasty in GRAPH_DYNASTY_LINKS.get(pid, []):
-                        dynasty_id = f"d{idx + 1}"
-                        add_node(dynasty_id, dynasty, "dynasty")
-                        add_edge(heritage_id, dynasty_id, RELATION_LABELS["PREVAILED_IN"])
-                for idx, material in enumerate(MATERIAL_ORDER):
-                    if material in GRAPH_MATERIAL_LINKS.get(pid, []):
-                        material_id = f"m{idx + 1}"
-                        add_node(material_id, material, "material")
-                        add_edge(heritage_id, material_id, RELATION_LABELS["USES_MATERIAL"])
-                for idx, custom in enumerate(FOLK_CUSTOM_ORDER):
-                    if custom in GRAPH_CUSTOM_LINKS.get(pid, []):
-                        custom_id = f"f{idx + 1}"
-                        add_node(custom_id, custom, "folk_custom")
-                        add_edge(heritage_id, custom_id, RELATION_LABELS["ASSOCIATED_WITH"])
+                    person_count += 1
 
         return {"nodes": list(nodes.values()), "edges": edges}
+
+    def _load_memory_projects(self) -> "tuple[list[dict], list[dict]]":
+        """加载内存图谱的项目/传承人数据：优先 MySQL，空则回退演示数据。"""
+        try:
+            session = SessionLocal()
+            try:
+                db_projects = session.execute(select(HeritageProject)).scalars().all()
+                if db_projects:
+                    projects = [
+                        {
+                            "id": p.id,
+                            "name": p.name,
+                            "category": p.category,
+                            "region": p.region or "",
+                        }
+                        for p in db_projects
+                    ]
+                    db_inheritors = session.execute(select(Inheritor)).scalars().all()
+                    inheritors = [
+                        {
+                            "id": i.id,
+                            "name": i.name,
+                            "project_id": i.project_id,
+                            "title": i.title or "",
+                        }
+                        for i in db_inheritors
+                    ]
+                    return projects, inheritors
+            finally:
+                session.close()
+        except Exception as exc:  # noqa: BLE001 - 数据库不可用则回退演示数据
+            logger.warning("内存图谱读取数据库失败，回退演示数据：%s", exc)
+        # 回退内置演示数据
+        demo_inheritors = [
+            {"id": i["id"], "name": i["name"], "project_id": i["project_id"], "title": i["title"]}
+            for i in DEMO_INHERITORS
+        ]
+        return DEMO_PROJECTS, demo_inheritors
 
     # ---------- MySQL → Neo4j 同步 ----------
     def sync_from_mysql(self, session: Optional[Session] = None) -> bool:
