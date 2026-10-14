@@ -31,6 +31,8 @@ doc_extracted.txt
 server/chroma_data/
 # WorkBuddy 项目数据目录
 .workbuddy/
+# 抓取/生成的数据文件（由 scripts/crawl_ihchina.py 等脚本重新生成）
+data/
 
 # ===== 二进制资源（由脚本生成，不入库） =====
 # tabBar 图标与应用 Logo：python scripts/gen_icons.py 生成
