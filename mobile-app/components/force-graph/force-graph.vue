@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, watch, nextTick } from 'vue'
+import { ref, reactive, onMounted, watch, nextTick, getCurrentInstance } from 'vue'
 
 const props = defineProps({
   nodes: { type: Array, default: () => [] },
@@ -348,17 +348,17 @@ function resetView() {
 /* ---------- 画布尺寸 ---------- */
 async function measure() {
   await nextTick()
-  const query = uni.createSelectorQuery()
-  // 必须同时请求 node 字段，否则小程序/APP 端拿不到 canvas 元素导致画布空白
+  // 必须用 .in(instance) 限定组件作用域，否则 H5 端查不到节点
+  const instance = getCurrentInstance()
+  const query = uni.createSelectorQuery().in(instance)
   query.select('.fg-canvas').fields({ node: true, size: true }).exec((res) => {
     let w = (res && res[0] && res[0].width) || 0
     let h = (res && res[0] && res[0].height) || 0
-    // 尺寸兜底：部分端 canvas 拿不到 size，用窗口尺寸估算
+    // 尺寸兜底：拿不到时用窗口尺寸估算（宽度满宽，高度按容器 900rpx 折算）
     if (!w || !h) {
       const sys = uni.getSystemInfoSync()
-      const winW = sys.windowWidth || 375
-      w = w || winW
-      h = h || 420
+      w = w || sys.windowWidth - 40 || 335
+      h = h || Math.round((sys.windowWidth - 40) * 1.34) || 450
     }
     canvasW.value = w
     canvasH.value = h
@@ -372,12 +372,12 @@ async function measure() {
       c2d.setTransform(dpr, 0, 0, dpr, 0, 0)
       ctx.value = c2d
     } else {
-      ctx.value = uni.createCanvasContext(canvasId)
+      ctx.value = uni.createCanvasContext(canvasId, instance)
     }
     // #endif
     // #ifdef H5
-    // H5 端 uni-app 的 canvas 编译为原生 canvas，用 createCanvasContext 获取上下文
-    ctx.value = uni.createCanvasContext(canvasId)
+    // H5 端用 createCanvasContext 获取上下文（需传组件实例定位 canvas）
+    ctx.value = uni.createCanvasContext(canvasId, instance)
     // #endif
     initSim()
     // 预热若干帧让布局快速收敛
