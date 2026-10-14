@@ -88,7 +88,7 @@ GET /api/v1/heritage/categories
 **请求示例**：
 
 ```bash
-curl http://localhost:8000/api/v1/heritage/categories
+curl http://localhost:5757/api/v1/heritage/categories
 ```
 
 **响应示例**：
@@ -129,7 +129,7 @@ GET /api/v1/heritage
 **请求示例**：
 
 ```bash
-curl "http://localhost:8000/api/v1/heritage?category=传统美术&page=1&size=20"
+curl "http://localhost:5757/api/v1/heritage?category=传统美术&page=1&size=20"
 ```
 
 **响应示例**：
@@ -174,7 +174,7 @@ GET /api/v1/heritage/{id}
 **请求示例**：
 
 ```bash
-curl http://localhost:8000/api/v1/heritage/1
+curl http://localhost:5757/api/v1/heritage/1
 ```
 
 **响应示例**：
@@ -223,7 +223,7 @@ GET /api/v1/heritage/inheritor/{id}
 **请求示例**：
 
 ```bash
-curl http://localhost:8000/api/v1/heritage/inheritor/101
+curl http://localhost:5757/api/v1/heritage/inheritor/101
 ```
 
 **响应示例**：
@@ -261,7 +261,7 @@ GET /api/v1/heritage/{id}/recommendations
 **请求示例**：
 
 ```bash
-curl http://localhost:8000/api/v1/heritage/1/recommendations
+curl http://localhost:5757/api/v1/heritage/1/recommendations
 ```
 
 **响应示例**：
@@ -303,7 +303,7 @@ GET /api/v1/knowledge-graph
 **请求示例**：
 
 ```bash
-curl "http://localhost:8000/api/v1/knowledge-graph?category=传统美术&depth=2"
+curl "http://localhost:5757/api/v1/knowledge-graph?category=传统美术&depth=2"
 ```
 
 **响应示例**：
@@ -357,7 +357,7 @@ POST /api/v1/ai/generate-pattern
 **请求示例**：
 
 ```bash
-curl -X POST http://localhost:8000/api/v1/ai/generate-pattern \
+curl -X POST http://localhost:5757/api/v1/ai/generate-pattern \
   -H "Content-Type: application/json" \
   -d '{"prompt": "梅花主题", "style": "扬州剪纸", "size": "1024x1024"}'
 ```
@@ -394,7 +394,7 @@ POST /api/v1/ai/generate-script
 **请求示例**：
 
 ```bash
-curl -X POST http://localhost:8000/api/v1/ai/generate-script \
+curl -X POST http://localhost:5757/api/v1/ai/generate-script \
   -H "Content-Type: application/json" \
   -d '{"theme": "漆器制作流程", "duration": 60, "dialect": true, "roleCount": 3}'
 ```
@@ -445,7 +445,7 @@ POST /api/v1/ai/generate-painting
 **请求示例**：
 
 ```bash
-curl -X POST http://localhost:8000/api/v1/ai/generate-painting \
+curl -X POST http://localhost:5757/api/v1/ai/generate-painting \
   -H "Content-Type: application/json" \
   -d '{"mode": "text", "prompt": "瘦西湖春晓，剪纸风格", "style": "剪纸风"}'
 ```
@@ -486,7 +486,7 @@ POST /api/v1/ai/works
 **请求示例**：
 
 ```bash
-curl -X POST http://localhost:8000/api/v1/ai/works \
+curl -X POST http://localhost:5757/api/v1/ai/works \
   -H "Authorization: Bearer {token}" \
   -H "Content-Type: application/json" \
   -d '{"work_type": "pattern", "title": "梅花纹样", "content": "/static/images/gen-pattern-1.jpg", "style": "扬州剪纸", "prompt": "梅花主题"}'
@@ -526,7 +526,7 @@ GET /api/v1/ai/works
 **请求示例**：
 
 ```bash
-curl http://localhost:8000/api/v1/ai/works \
+curl http://localhost:5757/api/v1/ai/works \
   -H "Authorization: Bearer {token}"
 ```
 
@@ -565,7 +565,7 @@ DELETE /api/v1/ai/works/{id}
 **请求示例**：
 
 ```bash
-curl -X DELETE http://localhost:8000/api/v1/ai/works/1 \
+curl -X DELETE http://localhost:5757/api/v1/ai/works/1 \
   -H "Authorization: Bearer {token}"
 ```
 
@@ -600,7 +600,7 @@ GET /api/v1/audio/guide/{projectId}
 **请求示例**：
 
 ```bash
-curl "http://localhost:8000/api/v1/audio/guide/1?lang=dialect"
+curl "http://localhost:5757/api/v1/audio/guide/1?lang=dialect"
 ```
 
 **响应示例**：
@@ -630,7 +630,7 @@ POST /api/v1/audio/qa
 **请求示例**：
 
 ```bash
-curl -X POST http://localhost:8000/api/v1/audio/qa \
+curl -X POST http://localhost:5757/api/v1/audio/qa \
   -H "Content-Type: application/json" \
   -d '{"question": "扬州剪纸有多少年历史？"}'
 ```
@@ -664,7 +664,7 @@ POST /api/v1/guide/scan-resolve
 **请求示例**：
 
 ```bash
-curl -X POST http://localhost:8000/api/v1/guide/scan-resolve \
+curl -X POST http://localhost:5757/api/v1/guide/scan-resolve \
   -H "Content-Type: application/json" \
   -d '{"code": "heritouch://project?id=1"}'
 ```
@@ -695,7 +695,7 @@ POST /api/v1/guide/offline-pack
 **请求示例**：
 
 ```bash
-curl -X POST http://localhost:8000/api/v1/guide/offline-pack
+curl -X POST http://localhost:5757/api/v1/guide/offline-pack
 ```
 
 **响应示例**：
@@ -730,7 +730,7 @@ GET /api/v1/game/levels
 **请求示例**：
 
 ```bash
-curl http://localhost:8000/api/v1/game/levels
+curl http://localhost:5757/api/v1/game/levels
 ```
 
 **响应示例**：
@@ -791,7 +791,7 @@ GET /api/v1/game/questions/{levelId}
 **请求示例**：
 
 ```bash
-curl http://localhost:8000/api/v1/game/questions/1?count=10
+curl http://localhost:5757/api/v1/game/questions/1?count=10
 ```
 
 **响应示例**：
@@ -847,7 +847,7 @@ POST /api/v1/game/submit
 **请求示例**：
 
 ```bash
-curl -X POST http://localhost:8000/api/v1/game/submit \
+curl -X POST http://localhost:5757/api/v1/game/submit \
   -H "Authorization: Bearer {token}" \
   -H "Content-Type: application/json" \
   -d '{"questionId": 1, "answer": "A"}'
@@ -884,7 +884,7 @@ GET /api/v1/game/rank
 **请求示例**：
 
 ```bash
-curl http://localhost:8000/api/v1/game/rank
+curl http://localhost:5757/api/v1/game/rank
 ```
 
 **响应示例**：
@@ -914,7 +914,7 @@ GET /api/v1/game/wrong
 **请求示例**：
 
 ```bash
-curl http://localhost:8000/api/v1/game/wrong \
+curl http://localhost:5757/api/v1/game/wrong \
   -H "Authorization: Bearer {token}"
 ```
 
@@ -958,7 +958,7 @@ DELETE /api/v1/game/wrong/{id}
 **请求示例**：
 
 ```bash
-curl -X DELETE http://localhost:8000/api/v1/game/wrong/1 \
+curl -X DELETE http://localhost:5757/api/v1/game/wrong/1 \
   -H "Authorization: Bearer {token}"
 ```
 
@@ -989,7 +989,7 @@ POST /api/v1/user/login
 **请求示例**：
 
 ```bash
-curl -X POST http://localhost:8000/api/v1/user/login \
+curl -X POST http://localhost:5757/api/v1/user/login \
   -H "Content-Type: application/json" \
   -d '{"openid": "demo_admin", "nickname": "非遗管理员", "avatar": "/static/images/avatar-default.jpg"}'
 ```
@@ -1025,7 +1025,7 @@ GET /api/v1/user/info
 **请求示例**：
 
 ```bash
-curl http://localhost:8000/api/v1/user/info \
+curl http://localhost:5757/api/v1/user/info \
   -H "Authorization: Bearer {token}"
 ```
 
@@ -1065,7 +1065,7 @@ PUT /api/v1/user/profile
 **请求示例**：
 
 ```bash
-curl -X PUT http://localhost:8000/api/v1/user/profile \
+curl -X PUT http://localhost:5757/api/v1/user/profile \
   -H "Authorization: Bearer {token}" \
   -H "Content-Type: application/json" \
   -d '{"nickname": "扬州非遗爱好者"}'
@@ -1103,7 +1103,7 @@ POST /api/v1/user/favorite
 **请求示例**：
 
 ```bash
-curl -X POST http://localhost:8000/api/v1/user/favorite \
+curl -X POST http://localhost:5757/api/v1/user/favorite \
   -H "Authorization: Bearer {token}" \
   -H "Content-Type: application/json" \
   -d '{"fav_type": "project", "fav_id": 1, "fav_name": "扬州剪纸"}'
@@ -1142,7 +1142,7 @@ DELETE /api/v1/user/favorite/{id}
 **请求示例**：
 
 ```bash
-curl -X DELETE http://localhost:8000/api/v1/user/favorite/1 \
+curl -X DELETE http://localhost:5757/api/v1/user/favorite/1 \
   -H "Authorization: Bearer {token}"
 ```
 
@@ -1171,7 +1171,7 @@ GET /api/v1/user/favorites
 **请求示例**：
 
 ```bash
-curl http://localhost:8000/api/v1/user/favorites \
+curl http://localhost:5757/api/v1/user/favorites \
   -H "Authorization: Bearer {token}"
 ```
 

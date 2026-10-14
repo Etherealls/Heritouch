@@ -1,7 +1,7 @@
 # =====================================================================
 # Heritouch 后端 Docker 镜像
 # 构建：docker build -t heritouch-api ./server
-# 运行：docker run -p 8000:8000 --env-file server/.env heritouch-api
+# 运行：docker run -p 5757:5757 --env-file server/.env heritouch-api
 # =====================================================================
 FROM python:3.11-slim
 
@@ -24,7 +24,7 @@ COPY . .
 RUN mkdir -p /app/static/images/questions /app/static/audio
 
 # 暴露端口
-EXPOSE 8000
+EXPOSE 5757
 
 # 启动命令：uvicorn 托管 FastAPI 应用
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5757"]

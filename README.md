@@ -165,8 +165,8 @@ docker compose exec neo4j cypher-shell -u neo4j -p password \
 
 | 服务 | 地址 | 账号 |
 | --- | --- | --- |
-| API 根路径 | http://localhost:8000/api/v1 | — |
-| API 交互式文档 | http://localhost:8000/docs | — |
+| API 根路径 | http://localhost:5757/api/v1 | — |
+| API 交互式文档 | http://localhost:5757/docs | — |
 | Neo4j 浏览器 | http://localhost:7474 | neo4j / password |
 | MySQL | localhost:3306 | root / heritouch |
 | ChromaDB | http://localhost:8001 | — |
@@ -182,10 +182,10 @@ cd server
 pip install -r requirements.txt      # 安装依赖
 cp .env.example .env                 # 配置数据库/AI 密钥（按注释填写）
 python -m scripts.seed_data          # 一键灌数（MySQL 结构+数据、Neo4j 图谱）
-uvicorn app.main:app --reload        # 启动服务，默认 http://localhost:8000
+uvicorn app.main:app --reload        # 启动服务，默认 http://localhost:5757
 
 # 真机/局域网调试时，需监听所有网卡（否则手机连不上）：
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+uvicorn app.main:app --reload --host 0.0.0.0 --port 5757
 ```
 
 **前端：**
@@ -220,15 +220,15 @@ npm install
 
 - **默认演示模式**：前端 `mobile-app/utils/config.js` 中 `useMock = true`，所有接口由本地 Mock 数据（`api/mock/data.js`）驱动，**无需后端即可完整体验**全部功能；
 - **数据规模**：Mock 数据源为**全国非遗真实名录**（中国非物质文化遗产网 ihchina.cn，4234 个项目 / 3959 位传承人 / 10 大门类），由 `scripts/build_all_data.py` 生成 `api/mock/national-data.js`；
-- **切换真实服务器**：进入「我的 → 设置 → 服务器配置」，填写后端地址（如 `http://localhost:8000/api/v1`）并关闭 Mock 开关即可；后端种子脚本 `server/scripts/seed_data.py` 会自动检测并灌入同一份全国数据；
-- **真机/局域网调试**：手机与电脑连接**同一 WiFi**，在「我的 → 设置 → 服务器地址」填写电脑的局域网 IP（如 `http://192.168.1.100:8000/api/v1`，用 `ipconfig` 查看电脑 IPv4 地址），点击「测试连接」验证可达即可；后端需以 `--host 0.0.0.0` 启动，且 Windows 防火墙需放行 8000 端口。换网络后只需在设置页更新 IP，**无需重新打包**；
+- **切换真实服务器**：进入「我的 → 设置 → 服务器配置」，填写后端地址（如 `http://localhost:5757/api/v1`）并关闭 Mock 开关即可；后端种子脚本 `server/scripts/seed_data.py` 会自动检测并灌入同一份全国数据；
+- **真机/局域网调试**：手机与电脑连接**同一 WiFi**，在「我的 → 设置 → 服务器地址」填写电脑的局域网 IP（如 `http://192.168.1.100:5757/api/v1`，用 `ipconfig` 查看电脑 IPv4 地址），点击「测试连接」验证可达即可；后端需以 `--host 0.0.0.0` 启动，且 Windows 防火墙需放行 5757 端口。换网络后只需在设置页更新 IP，**无需重新打包**；
 - **Mock 与真实接口契约一致**：Mock 层与 `docs/API.md` 中定义的请求/响应结构完全一致，切换时业务代码零改动。
 
 > **关于图谱性能**：全国数据量达 8000+ 实体节点，移动端力导向图无法一次性渲染全部。图谱页默认展示「类别 → 代表项目」概览，点击类别筛选后展示该类项目与传承人子图（单类限流约 120 个项目，避免卡顿）。
 
 ## 9. API 文档
 
-完整 REST API 文档见 [docs/API.md](docs/API.md)，涵盖非遗内容、知识图谱、AI 创作、导览服务、科普闯关、用户中心共 **28 个接口**，含请求参数、响应示例与错误码说明。FastAPI 启动后亦可访问交互式文档 `http://localhost:8000/docs`。
+完整 REST API 文档见 [docs/API.md](docs/API.md)，涵盖非遗内容、知识图谱、AI 创作、导览服务、科普闯关、用户中心共 **28 个接口**，含请求参数、响应示例与错误码说明。FastAPI 启动后亦可访问交互式文档 `http://localhost:5757/docs`。
 
 ## 10. 数据来源与合规说明
 
@@ -254,7 +254,7 @@ npm install
 ## 12. 常见问题 FAQ
 
 **Q1：前端请求后端报跨域错误（CORS）？**
-A：后端已通过 FastAPI `CORSMiddleware` 放开跨域；若自行修改，请确认 `server/app/main.py` 中 `allow_origins` 包含你的前端地址。H5 调试建议后端开启 `--reload` 并保持 `http://localhost:8000` 访问。
+A：后端已通过 FastAPI `CORSMiddleware` 放开跨域；若自行修改，请确认 `server/app/main.py` 中 `allow_origins` 包含你的前端地址。H5 调试建议后端开启 `--reload` 并保持 `http://localhost:5757` 访问。
 
 **Q2：微信小程序报不在合法域名列表中？**
 A：微信开发者工具 → 详情 → 本地设置 → 勾选"不校验合法域名"仅供开发调试；真机预览需在小程序后台（开发 → 开发管理 → 开发设置 → 服务器域名）将后端域名加入 `request`、`uploadFile`、`downloadFile` 合法域名列表，且必须为 HTTPS。

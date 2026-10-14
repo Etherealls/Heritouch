@@ -8,7 +8,7 @@
           class="server-input"
           type="text"
           v-model="baseUrlInput"
-          placeholder="http://192.168.1.100:8000/api/v1"
+          placeholder="http://192.168.1.100:5757/api/v1"
           placeholder-class="server-placeholder"
           @blur="onBaseUrlBlur"
         />
@@ -25,7 +25,7 @@
         </view>
       </view>
       <text class="server-tip">
-        真机调试时填写电脑的局域网 IP（如 http://192.168.x.x:8000/api/v1），
+        真机调试时填写电脑的局域网 IP（如 http://192.168.x.x:5757/api/v1），
         手机与电脑需连接同一 WiFi。换网络后在此更新 IP 即可，无需重新打包。
       </text>
       <text v-if="testResult" class="server-test-result" :class="testOk ? 'ok' : 'fail'">{{ testResult }}</text>
@@ -140,7 +140,7 @@ function onTestConnection() {
 
 /* 恢复默认地址 */
 function onResetBaseUrl() {
-  baseUrlInput.value = 'http://localhost:8000/api/v1'
+  baseUrlInput.value = 'http://localhost:5757/api/v1'
   appStore.setBaseUrl(baseUrlInput.value)
   testResult.value = ''
   uni.showToast({ title: '已恢复默认地址', icon: 'none' })

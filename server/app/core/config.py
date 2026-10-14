@@ -53,7 +53,7 @@ class Settings(BaseSettings):
     IMAGE_TIMEOUT_SECONDS: float = 60.0
 
     # ---------- RAG 向量库（ChromaDB） ----------
-    # CHROMA_URL 形如 http://localhost:8000；留空则使用本地持久化目录
+    # CHROMA_URL 形如 http://localhost:5757；留空则使用本地持久化目录
     CHROMA_URL: str = ""
     CHROMA_PERSIST_DIR: str = "./chroma_data"
     EMBEDDING_MODEL: str = "BAAI/bge-large-zh-v1.5"

@@ -23,7 +23,7 @@ const storageKeys = {
 
 // 默认配置（未在设置页修改时的兜底）
 const DEFAULTS = {
-  baseUrl: 'http://localhost:8000/api/v1',
+  baseUrl: 'http://localhost:5757/api/v1',
   timeout: 30000
 }
 
